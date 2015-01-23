@@ -6,14 +6,16 @@ import (
 
 	log "github.com/cihub/seelog"
 
-	"github.com/obeattie/sase-parser/parser"
+	"github.com/obeattie/sase-parser/query"
 )
 
 func main() {
 	defer log.Flush()
 
 	bytes, _ := ioutil.ReadAll(os.Stdin)
-	if _, err := parser.Parse(string(bytes)); err != nil {
-		log.Error(err.Error())
+	query, err := query.Parse(string(bytes))
+	if err != nil {
+		panic(err)
 	}
+	panic(query.Query())
 }
