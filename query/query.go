@@ -49,9 +49,18 @@ func (q *Query) Window() time.Duration {
 	return q.window
 }
 
-// Returns whether this query is interested in the passed event
-func (q *Query) ShouldCapture(e domain.Event) bool {
-	return q.capture.Matches(e) != ""
+// Returns whether this query is interested in the passed event. If so, the alias under which it should be captured is
+// returned.
+func (q *Query) ShouldCapture(e domain.Event) string {
+	return q.capture.Matches(e)
+}
+
+func (q *Query) Evaluate(evs CapturedEvents) *bool {
+	if q.predicate == nil {
+		t := true
+		return &t
+	}
+	return q.predicate.Evaluate(evs)
 }
 
 func (q *Query) validate() error {
