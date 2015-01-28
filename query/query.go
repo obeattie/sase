@@ -80,6 +80,15 @@ func (q *Query) validate() error {
 		return fmt.Errorf("Query has duplicate aliases %s", strings.Join(duplicateAliases, ", "))
 	}
 
+	// Check for predicate references to nonexistant events
+	if q.predicate != nil {
+		for _, alias := range q.predicate.usedAliases() {
+			if _, ok := seenAliases[alias]; !ok {
+				return fmt.Errorf("Reference to nonexistent capture %s", alias)
+			}
+		}
+	}
+
 	if q.window < 0 {
 		return fmt.Errorf("Query has negative window duration")
 	}

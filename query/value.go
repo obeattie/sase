@@ -15,6 +15,7 @@ var ErrEventNotFound = errors.New("Cannot find event")
 type value interface {
 	Representable
 	Value(domain.CapturedEvents) (interface{}, error)
+	usedAliases() []string
 }
 
 // A literalValue is a simple value that always returns a constant
@@ -36,6 +37,10 @@ func (v literalValue) QueryText() string {
 
 func (v literalValue) Value(evs domain.CapturedEvents) (interface{}, error) {
 	return v.v, nil
+}
+
+func (v literalValue) usedAliases() []string {
+	return nil
 }
 
 // An attributeLookup represents the lookup of an attribute from an event (it handles nested key paths)
@@ -88,4 +93,12 @@ func (p attributeLookup) Value(evs domain.CapturedEvents) (interface{}, error) {
 	} else {
 		return nil, fmt.Errorf("Attribute lookup failed for %s: lookup has too few parts", p)
 	}
+}
+
+func (p attributeLookup) usedAliases() []string {
+	parts := strings.SplitN(string(p), ".", 2)
+	if len(parts) < 1 {
+		return nil
+	}
+	return parts[:1]
 }

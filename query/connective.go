@@ -32,6 +32,14 @@ func (c conjunction) QueryText() string {
 	return strings.Join(results, " AND ")
 }
 
+func (c conjunction) usedAliases() []string {
+	result := make([]string, 0, len(c))
+	for _, p := range c {
+		result = append(result, p.usedAliases()...)
+	}
+	return result
+}
+
 // A disunction represents an array of OR'd predicates
 type disjunction []Predicate
 
@@ -58,4 +66,12 @@ func (d disjunction) QueryText() string {
 		results[i] = p.QueryText()
 	}
 	return strings.Join(results, " OR ")
+}
+
+func (d disjunction) usedAliases() []string {
+	result := make([]string, 0, len(d))
+	for _, p := range d {
+		result = append(result, p.usedAliases()...)
+	}
+	return result
 }

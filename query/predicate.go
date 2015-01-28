@@ -29,6 +29,8 @@ type Predicate interface {
 	// predicate (ie. it refers to events which have not yet been captured).
 	// TODO: Handle nil values higher up to always terminate a candidate when its event sequence is known to be complete.
 	Evaluate(domain.CapturedEvents) *bool
+	// usedAliases returns the events aliases which are consulted during evaluation
+	usedAliases() []string
 }
 
 type op uint8
@@ -141,4 +143,15 @@ func (p *operatorPredicate) QueryText() string {
 		buf.WriteString(p.right.QueryText())
 	}
 	return buf.String()
+}
+
+func (p *operatorPredicate) usedAliases() []string {
+	result := make([]string, 0)
+	if p.left != nil {
+		result = append(result, p.left.usedAliases()...)
+	}
+	if p.right != nil {
+		result = append(result, p.right.usedAliases()...)
+	}
+	return result
 }

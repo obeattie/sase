@@ -10,7 +10,7 @@ import (
 
 func TestParsing(t *testing.T) {
 	// Don't put semicolons on the end; that happens automatically
-	expectations := map[string]bool{
+	expectations := map[string]bool{ // query: expect success parsing?
 		// EVENT-only
 		"EVENT a b":                                 true,
 		"EVENT SEQ(a b)":                            true,
@@ -29,6 +29,29 @@ func TestParsing(t *testing.T) {
 		"EVENT SEQ(a b, c b)": false, // Clashing capture aliases
 
 		// EVENT + WHERE
+		"EVENT a b WHERE b.foo == 'bar'":                                  true,
+		"EVENT a b WHERE b.foo == \"bar\"":                                true,
+		"EVENT a b WHERE b.foo != 'bar'":                                  true,
+		"EVENT a b WHERE b.foo == 'bar' AND b.bar == 'baz'":               true,
+		"EVENT SEQ(t1 e1, t2 e2, ANY(t3 e3, t4 e4)) WHERE e1.a1 == e2.a2": true,
+		"EVENT a b WHERE b.n == 1.0":                                      true,
+		"EVENT a b WHERE b.n == -1.0":                                     true,
+		"EVENT a b WHERE b.n != 1.0":                                      true,
+		"EVENT a b WHERE b.n < 1.0":                                       true,
+		"EVENT a b WHERE b.n > 1.0":                                       true,
+		"EVENT a b WHERE b.n <= 1.0":                                      true,
+		"EVENT a b WHERE b.n >= 1.0":                                      true,
+		"EVENT SEQ(t a, t b) WHERE a.n == b.n":                            true,
+		"EVENT SEQ(t a, t b) WHERE a.n != b.n":                            true,
+		"EVENT SEQ(t a, t b) WHERE a.n < b.n":                             true,
+		"EVENT SEQ(t a, t b) WHERE a.n > b.n":                             true,
+		"EVENT SEQ(t a, t b) WHERE a.n <= b.n":                            true,
+		"EVENT SEQ(t a, t b) WHERE a.n >= b.n":                            true,
+		// Errors
+		"EVENT a b WHERE b.foo == 'bar":    false, // Unterminated quote
+		"EVENT a b WHERE b.foo == \"bar":   false, // Unterminated quote
+		"EVENT a b WHERE a.foo == \"bar\"": false, // Nonexistant event
+		"EVENT a b WHERE b.foo == a.bar":   false, // Nonexistant event
 
 		// EVENT + WITHIN
 		"EVENT a b WITHIN 1h":                                  true,
