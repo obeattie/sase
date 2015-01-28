@@ -2,9 +2,6 @@ package query
 
 import (
     "fmt"
-    "time"
-
-    log "github.com/cihub/seelog"
 )
 
 %% machine sase;
@@ -19,9 +16,7 @@ func tokenize(data string) ([]*token, error) {
         mark      int = -1
         tokens        = make([]*token, 0, 10)
         proposals     = make([]*proposedToken, 0, 100)
-        start         = time.Now()
     )
-    defer log.Debugf("[Tokenizer] Took %s", time.Since(start).String())
 
     // Add a single token onto the committed tokens list to collect the actual tokens
     root := &token{tt: ttGeneric}
@@ -32,7 +27,7 @@ func tokenize(data string) ([]*token, error) {
     }
 
     propose := func(typ tt) {
-        log.Tracef("[Tokenizer] propose: %s", typ.String())
+        // log.Tracef("[Tokenizer] propose: %s", typ.String())
         proposals = append(proposals, &proposedToken{
             token: &token{
                 tt: typ,
@@ -59,7 +54,7 @@ func tokenize(data string) ([]*token, error) {
     }
 
     commit := func(typ tt) *token {
-        log.Tracef("[Tokenizer] commit: %s", typ.String())
+        // log.Tracef("[Tokenizer] commit: %s", typ.String())
         pt := proposal(typ)
         t := pt.token
         // Add everything on the tokens list that has been committed since this token was proposed as children of this
@@ -68,7 +63,7 @@ func tokenize(data string) ([]*token, error) {
         t.children = append(make([]*token, 0, len(children)), children...)
         tokens = append(tokens[:pt.i], t)
         // Remove any "defunct" proposals (like this one)
-        log.Tracef("[Tokenizer] commit removing %d defunct proposals", len(proposals)-pt.pi)
+        // log.Tracef("[Tokenizer] commit removing %d defunct proposals", len(proposals)-pt.pi)
         proposals = proposals[:pt.pi]
         return t
     }
@@ -175,6 +170,30 @@ func tokenize(data string) ([]*token, error) {
                 %{ commit(ttDisjunction) };
             Connective = Conjunction | Disjunction;
             
+            NumericLiteral =
+                Decimal
+                >mark
+                >{ propose(ttNumericLiteral) }
+                %{ setText(ttNumericLiteral) }
+                %{ commit(ttNumericLiteral) };
+            SingleQuotedStringLiteral =
+                "'"
+                >{ propose(ttStringLiteral) }
+                ("\\'" | ^("'"))*
+                >mark
+                %{ setText(ttStringLiteral) }
+                "'"
+                %{ commit(ttStringLiteral) };
+            DoubleQuotedStringLiteral =
+                "\""
+                >{ propose(ttStringLiteral) }
+                ("\\\"" | ^("\""))*
+                >mark
+                %{ setText(ttStringLiteral) }
+                "\""
+                %{ commit(ttStringLiteral) };
+            StringLiteral = (SingleQuotedStringLiteral | DoubleQuotedStringLiteral);
+            
             AttributeSelector =
                 Identifier
                 >mark
@@ -185,7 +204,8 @@ func tokenize(data string) ([]*token, error) {
             PredicateArg =
                 AttributeSelector
                 >{ propose(ttPredicate) }
-                Space* Comparison Space* AttributeSelector
+                Space* Comparison Space*
+                (StringLiteral | NumericLiteral | AttributeSelector)
                 %{ commit(ttPredicate) };
             Predicate = PredicateArg (Space+ Connective Space+ PredicateArg)*;
             
@@ -193,7 +213,7 @@ func tokenize(data string) ([]*token, error) {
         
         # -- WITHIN clause
             Duration =
-                (Decimal ("ns"i | "us"i | "ms"i | "s"i | "m"i | "h"i))
+                (Decimal ("ns"i | "us"i | "ms"i | "s"i | "m"i | "h"i))+
                 >mark
                 >{ propose(ttDuration) }
                 %{ setText(ttDuration) }
@@ -219,7 +239,11 @@ func tokenize(data string) ([]*token, error) {
         if p == pe {
             return nil, fmt.Errorf("Unexpected EOF")
         } else {
-            return nil, fmt.Errorf("Error at position %d", p)
+            end := p + 30
+            if end > len(data) {
+                end = len(data)
+            }
+            return nil, fmt.Errorf("Error at position %d (\"%s\"…)", p, data[p:end])
         }
     }
     

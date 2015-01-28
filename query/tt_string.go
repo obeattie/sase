@@ -4,9 +4,9 @@ package query
 
 import "fmt"
 
-const _tt_name = "ttGenericttEventClausettEventDeclttEventDeclTypettEventDeclAliasttSeqDeclttNegatedDeclttAnyDeclttWhereClausettEqttNettGtttLtttGettLettAttributeSelectorttConjunctionttDisjunctionttPredicatettWithinClausettDuration"
+const _tt_name = "ttGenericttNumericLiteralttStringLiteralttEventClausettEventDeclttEventDeclTypettEventDeclAliasttSeqDeclttNegatedDeclttAnyDeclttWhereClausettEqttNettGtttLtttGettLettAttributeSelectorttConjunctionttDisjunctionttPredicatettWithinClausettDuration"
 
-var _tt_index = [...]uint8{9, 22, 33, 48, 64, 73, 86, 95, 108, 112, 116, 120, 124, 128, 132, 151, 164, 177, 188, 202, 212}
+var _tt_index = [...]uint8{9, 25, 40, 53, 64, 79, 95, 104, 117, 126, 139, 143, 147, 151, 155, 159, 163, 182, 195, 208, 219, 233, 243}
 
 func (i tt) String() string {
 	if i >= tt(len(_tt_index)) {

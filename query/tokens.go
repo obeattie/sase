@@ -12,6 +12,9 @@ type tt uint8
 const (
 	ttGeneric tt = iota
 
+	ttNumericLiteral
+	ttStringLiteral
+
 	ttEventClause
 	ttEventDecl
 	ttEventDeclType

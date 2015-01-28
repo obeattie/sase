@@ -6,7 +6,7 @@ import (
 
 	log "github.com/cihub/seelog"
 
-	"github.com/obeattie/sase-parser/query"
+	"github.com/obeattie/sase/query"
 )
 
 func main() {
@@ -17,5 +17,5 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	panic(query.Query())
+	panic(query.QueryText())
 }
