@@ -5,6 +5,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/obeattie/sase/domain"
 )
 
 func TestAttributeLookup(t *testing.T) {
@@ -47,7 +49,7 @@ func TestAttributeLookup(t *testing.T) {
 
 	for keyPath, expectedResult := range lookups {
 		impl := attributeLookup(keyPath)
-		result, err := impl.Value(CapturedEvents{
+		result, err := impl.Value(domain.CapturedEvents{
 			"ev1": e,
 		})
 

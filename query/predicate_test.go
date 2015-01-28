@@ -4,6 +4,8 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+
+	"github.com/obeattie/sase/domain"
 )
 
 func TestEqPredicate(t *testing.T) {
@@ -28,7 +30,7 @@ func TestEqPredicate(t *testing.T) {
 			"bar": "baz",
 		},
 	}
-	evs := CapturedEvents{
+	evs := domain.CapturedEvents{
 		"e1": e1,
 		"e2": e2,
 		"e3": e3,

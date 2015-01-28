@@ -5,9 +5,11 @@ import (
 	"reflect"
 
 	log "github.com/cihub/seelog"
+
+	"github.com/obeattie/sase/domain"
 )
 
-func leftRightVals(evs CapturedEvents, left value, right value) (interface{}, interface{}, error) {
+func leftRightVals(evs domain.CapturedEvents, left, right value) (interface{}, interface{}, error) {
 	if left == nil || right == nil {
 		return nil, nil, fmt.Errorf("Left and right must not be nil")
 	} else if leftVal, err := left.Value(evs); err != nil {
@@ -25,7 +27,7 @@ type Predicate interface {
 	// so that it may return nil, which means that with the current event set, it's not possible to evaluate the
 	// predicate (ie. it refers to events which have not yet been captured).
 	// TODO: Handle nil values higher up to always terminate a candidate when its event sequence is known to be complete.
-	Evaluate(CapturedEvents) *bool
+	Evaluate(domain.CapturedEvents) *bool
 }
 
 // An eqPredicate evaluates equality between the two passed events
@@ -34,7 +36,7 @@ type eqPredicate struct {
 	right value
 }
 
-func (p *eqPredicate) Evaluate(evs CapturedEvents) *bool {
+func (p *eqPredicate) Evaluate(evs domain.CapturedEvents) *bool {
 	leftVal, rightVal, err := leftRightVals(evs, p.left, p.right)
 	if err == ErrEventNotFound {
 		return nil

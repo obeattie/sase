@@ -6,13 +6,15 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+
+	"github.com/obeattie/sase/domain"
 )
 
 var ErrEventNotFound = errors.New("Cannot find event")
 
 type value interface {
 	Representable
-	Value(CapturedEvents) (interface{}, error)
+	Value(domain.CapturedEvents) (interface{}, error)
 }
 
 // A literalValue is a simple value that always returns a constant
@@ -32,7 +34,7 @@ func (v literalValue) QueryText() string {
 	}
 }
 
-func (v literalValue) Value(evs CapturedEvents) (interface{}, error) {
+func (v literalValue) Value(evs domain.CapturedEvents) (interface{}, error) {
 	return v.v, nil
 }
 
@@ -43,7 +45,7 @@ func (p attributeLookup) QueryText() string {
 	return string(p)
 }
 
-func (p attributeLookup) Value(evs CapturedEvents) (interface{}, error) {
+func (p attributeLookup) Value(evs domain.CapturedEvents) (interface{}, error) {
 	parts := strings.Split(string(p), ".")
 
 	if len(parts) > 1 {

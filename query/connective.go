@@ -2,12 +2,14 @@ package query
 
 import (
 	"strings"
+
+	"github.com/obeattie/sase/domain"
 )
 
 // A conjunction represents an array of AND'ed predicates
 type conjunction []Predicate
 
-func (c conjunction) Evaluate(evs CapturedEvents) *bool {
+func (c conjunction) Evaluate(evs domain.CapturedEvents) *bool {
 	result := true
 	for _, p := range c {
 		r := p.Evaluate(evs)
@@ -33,7 +35,7 @@ func (c conjunction) QueryText() string {
 // A disunction represents an array of OR'd predicates
 type disjunction []Predicate
 
-func (d disjunction) Evaluate(evs CapturedEvents) *bool {
+func (d disjunction) Evaluate(evs domain.CapturedEvents) *bool {
 	result := false
 	hasNil := false
 	for _, p := range d {

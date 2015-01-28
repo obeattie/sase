@@ -9,9 +9,6 @@ import (
 	"github.com/obeattie/sase/domain"
 )
 
-// CapturedEvents represents an event sequence that has been captured from an input stream (or streams) by a query.
-type CapturedEvents map[string]domain.Event
-
 // A Representable may be converted back to a string query
 type Representable interface {
 	QueryText() string
@@ -55,7 +52,7 @@ func (q *Query) ShouldCapture(e domain.Event) string {
 	return q.capture.Matches(e)
 }
 
-func (q *Query) Evaluate(evs CapturedEvents) *bool {
+func (q *Query) Evaluate(evs domain.CapturedEvents) *bool {
 	if q.predicate == nil {
 		t := true
 		return &t
