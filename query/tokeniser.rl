@@ -153,11 +153,11 @@ func tokenize(data string) ([]*token, error) {
         
         # -- WHERE clause
             Eq = "==" >{ propose(ttEq) } %{ commit(ttEq) };
-            Ne = "!=" >{ propose(ttEq) } %{ commit(ttEq) };
-            Gt = ">" >{ propose(ttEq) } %{ commit(ttEq) };
-            Lt = "<" >{ propose(ttEq) } %{ commit(ttEq) };
-            Ge = ">=" >{ propose(ttEq) } %{ commit(ttEq) };
-            Le = "<=" >{ propose(ttEq) } %{ commit(ttEq) };
+            Ne = "!=" >{ propose(ttNe) } %{ commit(ttNe) };
+            Gt = ">" >{ propose(ttGt) } %{ commit(ttGt) };
+            Lt = "<" >{ propose(ttLt) } %{ commit(ttLt) };
+            Ge = ">=" >{ propose(ttGe) } %{ commit(ttGe) };
+            Le = "<=" >{ propose(ttLe) } %{ commit(ttLe) };
             Comparison = (Eq | Ne | Gt | Lt | Ge | Le);
             
             Conjunction =

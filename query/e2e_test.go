@@ -49,8 +49,10 @@ func TestE2E(t *testing.T) {
 	events := genEvents(100)
 	tr, fa := true, false
 	queries := map[string]*bool{
-		"EVENT t0 e0":                              &tr, // No predicate should match
-		"EVENT t0 e0 WHERE e0.foobar == e0.foobaz": &fa, // Nonexistent events
+		"EVENT t0 e0":                                  &tr, // No predicate should match
+		"EVENT t0 e0 WHERE e0.foobar == e0.foobaz":     &fa, // Nonexistent events
+		"EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 == e1.e0": &tr,
+		"EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 != e1.e0": &fa,
 	}
 
 	for queryText, expectedResult := range queries {

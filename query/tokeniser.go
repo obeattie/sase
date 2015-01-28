@@ -1698,11 +1698,11 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st19
 	tr33:
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st19
 	tr835:
 //line query/tokeniser.rl:202
@@ -1710,7 +1710,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st19
 	st19:
 		if p++; p == pe {
@@ -1761,15 +1761,15 @@ func tokenize(data string) ([]*token, error) {
 		goto st0
 	tr38:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 		goto st21
 	tr815:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 		goto st21
 	tr819:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 		goto st21
 	tr823:
 //line query/tokeniser.rl:155
@@ -1777,11 +1777,11 @@ func tokenize(data string) ([]*token, error) {
 		goto st21
 	tr826:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 		goto st21
 	tr830:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 		goto st21
 	st21:
 		if p++; p == pe {
@@ -1823,7 +1823,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st0
 	tr39:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st22
@@ -1833,13 +1833,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st22
 	tr816:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st22
 	tr820:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st22
@@ -1851,13 +1851,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st22
 	tr827:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st22
 	tr831:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st22
@@ -2145,11 +2145,11 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st29
 	tr68:
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st29
 	tr410:
 //line query/tokeniser.rl:202
@@ -2157,7 +2157,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st29
 	st29:
 		if p++; p == pe {
@@ -2208,15 +2208,15 @@ func tokenize(data string) ([]*token, error) {
 		goto st0
 	tr73:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 		goto st31
 	tr375:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 		goto st31
 	tr382:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 		goto st31
 	tr389:
 //line query/tokeniser.rl:155
@@ -2224,11 +2224,11 @@ func tokenize(data string) ([]*token, error) {
 		goto st31
 	tr395:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 		goto st31
 	tr402:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 		goto st31
 	st31:
 		if p++; p == pe {
@@ -2270,7 +2270,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st0
 	tr74:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st32
@@ -2280,13 +2280,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st32
 	tr376:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st32
 	tr383:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st32
@@ -2298,13 +2298,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st32
 	tr396:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st32
 	tr403:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st32
@@ -2649,11 +2649,11 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st40
 	tr96:
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st40
 	tr346:
 //line query/tokeniser.rl:202
@@ -2661,7 +2661,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st40
 	st40:
 		if p++; p == pe {
@@ -2719,15 +2719,15 @@ func tokenize(data string) ([]*token, error) {
 		goto st33
 	tr101:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 		goto st42
 	tr311:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 		goto st42
 	tr318:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 		goto st42
 	tr325:
 //line query/tokeniser.rl:155
@@ -2735,11 +2735,11 @@ func tokenize(data string) ([]*token, error) {
 		goto st42
 	tr331:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 		goto st42
 	tr338:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 		goto st42
 	st42:
 		if p++; p == pe {
@@ -2783,7 +2783,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st33
 	tr102:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -2797,7 +2797,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st441
 	tr312:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -2805,7 +2805,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st441
 	tr319:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -2821,7 +2821,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st441
 	tr332:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -2829,7 +2829,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st441
 	tr339:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -2937,7 +2937,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st33
 	tr103:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st43
@@ -2947,13 +2947,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st43
 	tr313:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st43
 	tr320:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st43
@@ -2965,13 +2965,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st43
 	tr333:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st43
 	tr340:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st43
@@ -3399,11 +3399,11 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st52
 	tr137:
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st52
 	tr285:
 //line query/tokeniser.rl:202
@@ -3411,7 +3411,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st52
 	st52:
 		if p++; p == pe {
@@ -3469,15 +3469,15 @@ func tokenize(data string) ([]*token, error) {
 		goto st45
 	tr142:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 		goto st54
 	tr250:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 		goto st54
 	tr257:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 		goto st54
 	tr264:
 //line query/tokeniser.rl:155
@@ -3485,11 +3485,11 @@ func tokenize(data string) ([]*token, error) {
 		goto st54
 	tr270:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 		goto st54
 	tr277:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 		goto st54
 	st54:
 		if p++; p == pe {
@@ -3533,7 +3533,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st45
 	tr143:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st55
@@ -3543,13 +3543,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st55
 	tr251:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st55
 	tr258:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st55
@@ -3561,13 +3561,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st55
 	tr271:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st55
 	tr278:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st55
@@ -3965,11 +3965,11 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st62
 	tr169:
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st62
 	tr224:
 //line query/tokeniser.rl:202
@@ -3977,7 +3977,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st62
 	st62:
 		if p++; p == pe {
@@ -4037,15 +4037,15 @@ func tokenize(data string) ([]*token, error) {
 		goto st44
 	tr174:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 		goto st64
 	tr189:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 		goto st64
 	tr196:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 		goto st64
 	tr203:
 //line query/tokeniser.rl:155
@@ -4053,11 +4053,11 @@ func tokenize(data string) ([]*token, error) {
 		goto st64
 	tr209:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 		goto st64
 	tr216:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 		goto st64
 	st64:
 		if p++; p == pe {
@@ -4101,7 +4101,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st44
 	tr175:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -4115,7 +4115,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st450
 	tr190:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -4123,7 +4123,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st450
 	tr197:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -4139,7 +4139,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st450
 	tr210:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -4147,7 +4147,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st450
 	tr217:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -4275,7 +4275,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st44
 	tr176:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -4289,7 +4289,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st452
 	tr191:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -4297,7 +4297,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st452
 	tr198:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -4313,7 +4313,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st452
 	tr211:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -4321,7 +4321,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st452
 	tr218:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -4351,7 +4351,7 @@ func tokenize(data string) ([]*token, error) {
 		goto tr113
 	tr177:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -4365,7 +4365,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st65
 	tr192:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -4373,7 +4373,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st65
 	tr199:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -4389,7 +4389,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st65
 	tr212:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -4397,7 +4397,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st65
 	tr219:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -4423,7 +4423,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st44
 	tr178:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -4437,7 +4437,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st453
 	tr193:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -4445,7 +4445,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st453
 	tr200:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -4461,7 +4461,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st453
 	tr213:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -4469,7 +4469,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st453
 	tr220:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -4549,7 +4549,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st44
 	tr179:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st455
@@ -4559,13 +4559,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st455
 	tr195:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st455
 	tr201:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st455
@@ -4577,13 +4577,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st455
 	tr215:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st455
 	tr221:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st455
@@ -4703,15 +4703,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st68
 	tr170:
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st68
 	tr226:
 //line query/tokeniser.rl:202
@@ -4719,9 +4719,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st68
 	st68:
 		if p++; p == pe {
@@ -4890,15 +4890,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st72
 	tr172:
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st72
 	tr228:
 //line query/tokeniser.rl:202
@@ -4906,9 +4906,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st72
 	st72:
 		if p++; p == pe {
@@ -5611,7 +5611,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st44
 	tr144:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -5625,7 +5625,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st461
 	tr252:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -5633,7 +5633,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st461
 	tr259:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -5649,7 +5649,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st461
 	tr272:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -5657,7 +5657,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st461
 	tr279:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -5765,7 +5765,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st45
 	tr145:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -5779,7 +5779,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st95
 	tr253:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -5787,7 +5787,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st95
 	tr260:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -5803,7 +5803,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st95
 	tr273:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -5811,7 +5811,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st95
 	tr280:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -5835,7 +5835,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st45
 	tr146:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -5849,7 +5849,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st463
 	tr254:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -5857,7 +5857,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st463
 	tr261:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -5873,7 +5873,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st463
 	tr274:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -5881,7 +5881,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st463
 	tr281:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -5955,7 +5955,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st45
 	tr147:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st465
@@ -5965,13 +5965,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st465
 	tr256:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st465
 	tr262:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st465
@@ -5983,13 +5983,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st465
 	tr276:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st465
 	tr282:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st465
@@ -6103,15 +6103,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st98
 	tr138:
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st98
 	tr287:
 //line query/tokeniser.rl:202
@@ -6119,9 +6119,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st98
 	st98:
 		if p++; p == pe {
@@ -6288,15 +6288,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st102
 	tr140:
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st102
 	tr289:
 //line query/tokeniser.rl:202
@@ -6304,9 +6304,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st102
 	st102:
 		if p++; p == pe {
@@ -6935,7 +6935,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st45
 	tr104:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -6949,7 +6949,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st125
 	tr314:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -6957,7 +6957,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st125
 	tr321:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -6973,7 +6973,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st125
 	tr334:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -6981,7 +6981,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st125
 	tr341:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -7005,7 +7005,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st33
 	tr105:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -7019,7 +7019,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st470
 	tr315:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -7027,7 +7027,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st470
 	tr322:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -7043,7 +7043,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st470
 	tr335:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -7051,7 +7051,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st470
 	tr342:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -7125,7 +7125,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st33
 	tr106:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st472
@@ -7135,13 +7135,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st472
 	tr317:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st472
 	tr323:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st472
@@ -7153,13 +7153,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st472
 	tr337:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st472
 	tr343:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st472
@@ -7273,15 +7273,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st128
 	tr97:
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st128
 	tr348:
 //line query/tokeniser.rl:202
@@ -7289,9 +7289,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st128
 	st128:
 		if p++; p == pe {
@@ -7458,15 +7458,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st132
 	tr99:
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st132
 	tr350:
 //line query/tokeniser.rl:202
@@ -7474,9 +7474,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st132
 	st132:
 		if p++; p == pe {
@@ -8105,7 +8105,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st33
 	tr75:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st155
@@ -8115,13 +8115,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st155
 	tr377:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st155
 	tr384:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st155
@@ -8133,13 +8133,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st155
 	tr397:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st155
 	tr404:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st155
@@ -8158,7 +8158,7 @@ func tokenize(data string) ([]*token, error) {
 		goto tr369
 	tr41:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -8172,7 +8172,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st156
 	tr378:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -8180,7 +8180,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st156
 	tr385:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -8196,7 +8196,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st156
 	tr398:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -8204,7 +8204,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st156
 	tr405:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -8222,7 +8222,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st0
 	tr42:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -8236,7 +8236,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st477
 	tr379:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -8244,7 +8244,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st477
 	tr386:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -8260,7 +8260,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st477
 	tr399:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -8268,7 +8268,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st477
 	tr406:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -8328,7 +8328,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st0
 	tr43:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st479
@@ -8338,13 +8338,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st479
 	tr381:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st479
 	tr387:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st479
@@ -8356,13 +8356,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st479
 	tr401:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st479
 	tr407:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st479
@@ -8463,15 +8463,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st159
 	tr69:
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st159
 	tr412:
 //line query/tokeniser.rl:202
@@ -8479,9 +8479,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st159
 	st159:
 		if p++; p == pe {
@@ -8637,15 +8637,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st163
 	tr71:
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st163
 	tr414:
 //line query/tokeniser.rl:202
@@ -8653,9 +8653,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st163
 	st163:
 		if p++; p == pe {
@@ -9467,11 +9467,11 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st192
 	tr445:
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st192
 	tr599:
 //line query/tokeniser.rl:202
@@ -9479,7 +9479,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st192
 	st192:
 		if p++; p == pe {
@@ -9537,15 +9537,15 @@ func tokenize(data string) ([]*token, error) {
 		goto st23
 	tr450:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 		goto st194
 	tr564:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 		goto st194
 	tr571:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 		goto st194
 	tr578:
 //line query/tokeniser.rl:155
@@ -9553,11 +9553,11 @@ func tokenize(data string) ([]*token, error) {
 		goto st194
 	tr584:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 		goto st194
 	tr591:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 		goto st194
 	st194:
 		if p++; p == pe {
@@ -9603,7 +9603,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:192
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st486
@@ -9617,7 +9617,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:192
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st486
@@ -9625,7 +9625,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:192
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st486
@@ -9641,7 +9641,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:192
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st486
@@ -9649,7 +9649,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:192
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st486
@@ -9675,7 +9675,7 @@ func tokenize(data string) ([]*token, error) {
 		goto tr79
 	tr452:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st195
@@ -9685,13 +9685,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st195
 	tr566:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st195
 	tr573:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st195
@@ -9703,13 +9703,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st195
 	tr586:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st195
 	tr593:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st195
@@ -10160,11 +10160,11 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st203
 	tr483:
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st203
 	tr538:
 //line query/tokeniser.rl:202
@@ -10172,7 +10172,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st203
 	st203:
 		if p++; p == pe {
@@ -10232,15 +10232,15 @@ func tokenize(data string) ([]*token, error) {
 		goto st196
 	tr488:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 		goto st205
 	tr503:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 		goto st205
 	tr510:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 		goto st205
 	tr517:
 //line query/tokeniser.rl:155
@@ -10248,11 +10248,11 @@ func tokenize(data string) ([]*token, error) {
 		goto st205
 	tr523:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 		goto st205
 	tr530:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 		goto st205
 	st205:
 		if p++; p == pe {
@@ -10298,7 +10298,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:192
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st491
@@ -10312,7 +10312,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:192
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st491
@@ -10320,7 +10320,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:192
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st491
@@ -10336,7 +10336,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:192
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st491
@@ -10344,7 +10344,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:192
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st491
@@ -10372,7 +10372,7 @@ func tokenize(data string) ([]*token, error) {
 		goto tr113
 	tr490:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -10386,7 +10386,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st492
 	tr505:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -10394,7 +10394,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st492
 	tr512:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -10410,7 +10410,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st492
 	tr525:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -10418,7 +10418,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st492
 	tr532:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:184
@@ -10522,7 +10522,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st196
 	tr491:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -10536,7 +10536,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st206
 	tr506:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -10544,7 +10544,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st206
 	tr513:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -10560,7 +10560,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st206
 	tr526:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -10568,7 +10568,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st206
 	tr533:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -10594,7 +10594,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st196
 	tr492:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -10608,7 +10608,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st494
 	tr507:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -10616,7 +10616,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st494
 	tr514:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -10632,7 +10632,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st494
 	tr527:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -10640,7 +10640,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st494
 	tr534:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -10720,7 +10720,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st196
 	tr493:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st496
@@ -10730,13 +10730,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st496
 	tr509:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st496
 	tr515:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st496
@@ -10748,13 +10748,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st496
 	tr529:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st496
 	tr535:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st496
@@ -10874,15 +10874,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st209
 	tr484:
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st209
 	tr540:
 //line query/tokeniser.rl:202
@@ -10890,9 +10890,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st209
 	st209:
 		if p++; p == pe {
@@ -11061,15 +11061,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st213
 	tr486:
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st213
 	tr542:
 //line query/tokeniser.rl:202
@@ -11077,9 +11077,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st213
 	st213:
 		if p++; p == pe {
@@ -11782,7 +11782,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st196
 	tr453:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -11796,7 +11796,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st236
 	tr567:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -11804,7 +11804,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st236
 	tr574:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -11820,7 +11820,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st236
 	tr587:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -11828,7 +11828,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st236
 	tr594:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -11852,7 +11852,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st23
 	tr454:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -11866,7 +11866,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st502
 	tr568:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -11874,7 +11874,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st502
 	tr575:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -11890,7 +11890,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st502
 	tr588:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -11898,7 +11898,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st502
 	tr595:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -11972,7 +11972,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st23
 	tr455:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st504
@@ -11982,13 +11982,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st504
 	tr570:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st504
 	tr576:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st504
@@ -12000,13 +12000,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st504
 	tr590:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st504
 	tr596:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st504
@@ -12120,15 +12120,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st239
 	tr446:
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st239
 	tr601:
 //line query/tokeniser.rl:202
@@ -12136,9 +12136,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st239
 	st239:
 		if p++; p == pe {
@@ -12305,15 +12305,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st243
 	tr448:
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st243
 	tr603:
 //line query/tokeniser.rl:202
@@ -12321,9 +12321,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st243
 	st243:
 		if p++; p == pe {
@@ -12952,7 +12952,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st23
 	tr40:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st266
@@ -12962,13 +12962,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st266
 	tr817:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st266
 	tr821:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st266
@@ -12980,13 +12980,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st266
 	tr828:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st266
 	tr832:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st266
@@ -13315,11 +13315,11 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st274
 	tr639:
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st274
 	tr792:
 //line query/tokeniser.rl:202
@@ -13327,7 +13327,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st274
 	st274:
 		if p++; p == pe {
@@ -13385,15 +13385,15 @@ func tokenize(data string) ([]*token, error) {
 		goto st267
 	tr644:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 		goto st276
 	tr757:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 		goto st276
 	tr764:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 		goto st276
 	tr771:
 //line query/tokeniser.rl:155
@@ -13401,11 +13401,11 @@ func tokenize(data string) ([]*token, error) {
 		goto st276
 	tr777:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 		goto st276
 	tr784:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 		goto st276
 	st276:
 		if p++; p == pe {
@@ -13449,7 +13449,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st267
 	tr645:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st277
@@ -13459,13 +13459,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st277
 	tr758:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st277
 	tr765:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st277
@@ -13477,13 +13477,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st277
 	tr778:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st277
 	tr785:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 		goto st277
@@ -13934,11 +13934,11 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st285
 	tr676:
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st285
 	tr731:
 //line query/tokeniser.rl:202
@@ -13946,7 +13946,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:156
-		propose(ttEq)
+		propose(ttNe)
 		goto st285
 	st285:
 		if p++; p == pe {
@@ -14006,15 +14006,15 @@ func tokenize(data string) ([]*token, error) {
 		goto st278
 	tr681:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 		goto st287
 	tr696:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 		goto st287
 	tr703:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 		goto st287
 	tr710:
 //line query/tokeniser.rl:155
@@ -14022,11 +14022,11 @@ func tokenize(data string) ([]*token, error) {
 		goto st287
 	tr716:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 		goto st287
 	tr723:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 		goto st287
 	st287:
 		if p++; p == pe {
@@ -14070,7 +14070,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st278
 	tr682:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -14084,7 +14084,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st515
 	tr697:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -14092,7 +14092,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st515
 	tr704:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -14108,7 +14108,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st515
 	tr717:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -14116,7 +14116,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st515
 	tr724:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:189
 		propose(ttStringLiteral)
 //line query/tokeniser.rl:192
@@ -14222,7 +14222,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:184
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st517
@@ -14236,7 +14236,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:184
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st517
@@ -14244,7 +14244,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:184
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st517
@@ -14260,7 +14260,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:184
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st517
@@ -14268,7 +14268,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:184
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st517
@@ -14296,7 +14296,7 @@ func tokenize(data string) ([]*token, error) {
 		goto tr113
 	tr684:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -14310,7 +14310,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st288
 	tr699:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -14318,7 +14318,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st288
 	tr706:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -14334,7 +14334,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st288
 	tr719:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -14342,7 +14342,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st288
 	tr726:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -14368,7 +14368,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st278
 	tr685:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -14382,7 +14382,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st518
 	tr700:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -14390,7 +14390,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st518
 	tr707:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -14406,7 +14406,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st518
 	tr720:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -14414,7 +14414,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st518
 	tr727:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -14494,7 +14494,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st278
 	tr686:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st520
@@ -14504,13 +14504,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st520
 	tr702:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st520
 	tr708:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st520
@@ -14522,13 +14522,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st520
 	tr722:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st520
 	tr728:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st520
@@ -14648,15 +14648,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st291
 	tr677:
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st291
 	tr733:
 //line query/tokeniser.rl:202
@@ -14664,9 +14664,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st291
 	st291:
 		if p++; p == pe {
@@ -14835,15 +14835,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st295
 	tr679:
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st295
 	tr735:
 //line query/tokeniser.rl:202
@@ -14851,9 +14851,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st295
 	st295:
 		if p++; p == pe {
@@ -15558,7 +15558,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:184
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st526
@@ -15572,7 +15572,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:184
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st526
@@ -15580,7 +15580,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:184
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st526
@@ -15596,7 +15596,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:184
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st526
@@ -15604,7 +15604,7 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:184
 		setText(ttStringLiteral)
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:181
 		propose(ttStringLiteral)
 		goto st526
@@ -15630,7 +15630,7 @@ func tokenize(data string) ([]*token, error) {
 		goto tr369
 	tr647:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -15644,7 +15644,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st318
 	tr760:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -15652,7 +15652,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st318
 	tr767:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -15668,7 +15668,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st318
 	tr780:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -15676,7 +15676,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st318
 	tr787:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -15700,7 +15700,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st267
 	tr648:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -15714,7 +15714,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st527
 	tr761:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -15722,7 +15722,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st527
 	tr768:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -15738,7 +15738,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st527
 	tr781:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -15746,7 +15746,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st527
 	tr788:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 //line query/tokeniser.rl:176
@@ -15820,7 +15820,7 @@ func tokenize(data string) ([]*token, error) {
 		goto st267
 	tr649:
 //line query/tokeniser.rl:156
-		commit(ttEq)
+		commit(ttNe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st529
@@ -15830,13 +15830,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st529
 	tr763:
 //line query/tokeniser.rl:158
-		commit(ttEq)
+		commit(ttLt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st529
 	tr769:
 //line query/tokeniser.rl:160
-		commit(ttEq)
+		commit(ttLe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st529
@@ -15848,13 +15848,13 @@ func tokenize(data string) ([]*token, error) {
 		goto st529
 	tr783:
 //line query/tokeniser.rl:157
-		commit(ttEq)
+		commit(ttGt)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st529
 	tr789:
 //line query/tokeniser.rl:159
-		commit(ttEq)
+		commit(ttGe)
 //line query/tokeniser.rl:87
 		mark = p
 		goto st529
@@ -15968,15 +15968,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st321
 	tr640:
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st321
 	tr794:
 //line query/tokeniser.rl:202
@@ -15984,9 +15984,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st321
 	st321:
 		if p++; p == pe {
@@ -16153,15 +16153,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st325
 	tr642:
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st325
 	tr796:
 //line query/tokeniser.rl:202
@@ -16169,9 +16169,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st325
 	st325:
 		if p++; p == pe {
@@ -16806,15 +16806,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st348
 	tr34:
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st348
 	tr837:
 //line query/tokeniser.rl:202
@@ -16822,9 +16822,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:158
-		propose(ttEq)
+		propose(ttLt)
 //line query/tokeniser.rl:160
-		propose(ttEq)
+		propose(ttLe)
 		goto st348
 	st348:
 		if p++; p == pe {
@@ -16980,15 +16980,15 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st352
 	tr36:
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st352
 	tr839:
 //line query/tokeniser.rl:202
@@ -16996,9 +16996,9 @@ func tokenize(data string) ([]*token, error) {
 //line query/tokeniser.rl:203
 		commit(ttAttributeSelector)
 //line query/tokeniser.rl:157
-		propose(ttEq)
+		propose(ttGt)
 //line query/tokeniser.rl:159
-		propose(ttEq)
+		propose(ttGe)
 		goto st352
 	st352:
 		if p++; p == pe {

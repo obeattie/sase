@@ -164,7 +164,7 @@ func parseWhereClauseToken(t *token) (Predicate, error) {
 	}
 
 	switch t.tt {
-	case ttEq:
+	case ttEq, ttNe, ttGt, ttLt, ttGe, ttLe:
 		if len(t.children) != 2 {
 			return nil, fmt.Errorf("%s must have 2 children", t.tt.String())
 		}
@@ -174,17 +174,27 @@ func parseWhereClauseToken(t *token) (Predicate, error) {
 		} else if right, err := parseValue(t.children[1]); err != nil {
 			return nil, err
 		} else {
-			return &eqPredicate{
+			result := &operatorPredicate{
 				left:  left,
 				right: right,
-			}, nil
-		}
+			}
 
-	case ttPredicate, ttWhereClause:
-		if result, err := parseChildren(); err != nil || result == nil || len(result) < 1 {
-			return nil, err
-		} else {
-			return result[0], nil
+			switch t.tt {
+			case ttEq:
+				result.op = opEq
+			case ttNe:
+				result.op = opNe
+			case ttGt:
+				result.op = opGt
+			case ttLt:
+				result.op = opLt
+			case ttGe:
+				result.op = opGe
+			case ttLe:
+				result.op = opLe
+			}
+
+			return result, nil
 		}
 
 	case ttConjunction:
@@ -203,6 +213,13 @@ func parseWhereClauseToken(t *token) (Predicate, error) {
 			return nil, nil
 		} else {
 			return append(make(disjunction, 0, len(childCaptures)), childCaptures...), nil
+		}
+
+	case ttPredicate, ttWhereClause:
+		if result, err := parseChildren(); err != nil || result == nil || len(result) < 1 {
+			return nil, err
+		} else {
+			return result[0], nil
 		}
 
 	default:

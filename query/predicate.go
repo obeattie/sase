@@ -1,6 +1,7 @@
 package query
 
 import (
+	"bytes"
 	"fmt"
 	"reflect"
 
@@ -30,30 +31,114 @@ type Predicate interface {
 	Evaluate(domain.CapturedEvents) *bool
 }
 
-// An eqPredicate evaluates equality between the two passed events
-type eqPredicate struct {
+type op uint8
+
+const (
+	opEq op = iota
+	opNe
+	opGt
+	opLt
+	opGe
+	opLe
+)
+
+// An operatorPredicate evaluates an operator between two values
+type operatorPredicate struct {
 	left  value
 	right value
+	op    op
 }
 
-func (p *eqPredicate) Evaluate(evs domain.CapturedEvents) *bool {
+func (p *operatorPredicate) Evaluate(evs domain.CapturedEvents) *bool {
 	leftVal, rightVal, err := leftRightVals(evs, p.left, p.right)
+	f := false
+
 	if err == ErrEventNotFound {
 		return nil
 	} else if err != nil {
-		log.Errorf("[sase:eqPredicate] Could not evaluate %s left/right: %s", p.QueryText(), err.Error())
-		ret := false
-		return &ret // Terminate this match
+		log.Errorf("[sase:operatorPredicate] Could not evaluate %s left/right: %s", p.QueryText(), err.Error())
+		return &f // Terminate this match
 	}
 
-	equal := reflect.DeepEqual(leftVal, rightVal)
-	return &equal
+	switch p.op {
+	case opEq:
+		result := reflect.DeepEqual(leftVal, rightVal)
+		return &result
+
+	case opNe:
+		result := !reflect.DeepEqual(leftVal, rightVal)
+		return &result
+
+	// >, <, >=, <= only work for float64's (currently)
+	case opGt:
+		if leftVal, ok := leftVal.(float64); ok {
+			if rightVal, ok := rightVal.(float64); ok {
+				result := leftVal > rightVal
+				return &result
+			}
+		}
+		log.Errorf("[sase:operatorPredicate] Could not compare gt for non-float64s: %s", p.QueryText())
+		return &f // Terminate this match
+
+	case opLt:
+		if leftVal, ok := leftVal.(float64); ok {
+			if rightVal, ok := rightVal.(float64); ok {
+				result := leftVal < rightVal
+				return &result
+			}
+		}
+		log.Errorf("[sase:operatorPredicate] Could not compare lt for non-float64s: %s", p.QueryText())
+		return &f // Terminate this match
+
+	case opGe:
+		if leftVal, ok := leftVal.(float64); ok {
+			if rightVal, ok := rightVal.(float64); ok {
+				result := leftVal >= rightVal
+				return &result
+			}
+		}
+		log.Errorf("[sase:operatorPredicate] Could not compare ge for non-float64s: %s", p.QueryText())
+		return &f // Terminate this match
+
+	case opLe:
+		if leftVal, ok := leftVal.(float64); ok {
+			if rightVal, ok := rightVal.(float64); ok {
+				result := leftVal <= rightVal
+				return &result
+			}
+		}
+		log.Errorf("[sase:operatorPredicate] Could not compare le for non-float64s: %s", p.QueryText())
+		return &f // Terminate this match
+
+	default:
+		log.Errorf("[sase:operatorPredicate] Unhandled op %v for %s", p.op, p.QueryText())
+		return &f
+	}
 }
 
-func (p *eqPredicate) QueryText() string {
-	if p.left != nil && p.right != nil {
-		return fmt.Sprintf("%s == %s", p.left.QueryText(), p.right.QueryText())
-	} else {
-		return ""
+func (p *operatorPredicate) QueryText() string {
+	buf := new(bytes.Buffer)
+	if p.left != nil {
+		buf.WriteString(p.left.QueryText())
 	}
+	buf.WriteRune(' ')
+	switch p.op {
+	case opEq:
+		buf.WriteString("==")
+	case opNe:
+		buf.WriteString("!=")
+	case opGt:
+		buf.WriteRune('>')
+	case opLt:
+		buf.WriteRune('<')
+	case opGe:
+		buf.WriteString(">=")
+	case opLe:
+		buf.WriteString("<=")
+	}
+	if p.right != nil {
+		buf.WriteRune(' ')
+		buf.WriteString(p.right.QueryText())
+	}
+	return buf.String()
 }
