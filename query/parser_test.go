@@ -28,6 +28,8 @@ func TestParsing(t *testing.T) {
 		"EVENT ANY()":         false, // Empty ANY (no capture)
 		"EVENT SEQ(a b, c b)": false, // Clashing capture aliases
 
+		// EVENT + WHERE
+
 		// EVENT + WITHIN
 		"EVENT a b WITHIN 1h":                                  true,
 		"EVENT SEQ(a b) WITHIN 30m":                            true,
@@ -36,6 +38,9 @@ func TestParsing(t *testing.T) {
 		"EVENT ANY(a b, c d) WITHIN 100000h":                   true,
 		"EVENT SEQ(a b, ANY(c d, e f)) WITHIN 200h30m20s100ns": true,
 		"EVENT SEQ(a e1, !(c e2), ANY(c e3, d e4)) WITHIN 1h":  true,
+		// Errors
+		"EVENT a b WITHIN 100000000000000h": false, // Duration overflow
+		"EVENT a b WITHIN -4h":              false, // Negative duration
 	}
 
 	te := func(queryText string, expectSuccess bool) {

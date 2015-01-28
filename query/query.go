@@ -74,5 +74,9 @@ func (q *Query) validate() error {
 		return fmt.Errorf("Query has duplicate aliases %s", strings.Join(duplicateAliases, ", "))
 	}
 
+	if q.window < 0 {
+		return fmt.Errorf("Query has negative window duration")
+	}
+
 	return nil
 }
