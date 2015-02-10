@@ -40,55 +40,54 @@ func TestOperatorPredicate(t *testing.T) {
 		"e3": e3,
 	}
 
-	tr, fa := true, false
-	cases := map[op]map[[2]string]*bool{
+	cases := map[op]map[[2]string]PredicateResult{
 		opEq: {
-			[2]string{"e1.foo", "e2.foo"}:       &tr,
-			[2]string{"e1.foo", "e3.foo"}:       &fa,
-			[2]string{"e2.bar", "e3.bar"}:       &tr,
-			[2]string{"e1.bar", "e3.bar"}:       &fa,
-			[2]string{"e1.foo", "e3.bazbazbas"}: &fa, // Attribute not found
-			[2]string{"e1.foo", "e5.foo"}:       nil, // Event not found
+			[2]string{"e1.foo", "e2.foo"}:       PredicateResultPositive,
+			[2]string{"e1.foo", "e3.foo"}:       PredicateResultNegative,
+			[2]string{"e2.bar", "e3.bar"}:       PredicateResultPositive,
+			[2]string{"e1.bar", "e3.bar"}:       PredicateResultNegative,
+			[2]string{"e1.foo", "e3.bazbazbas"}: PredicateResultNegative,  // Attribute not found
+			[2]string{"e1.foo", "e5.foo"}:       PredicateResultUncertain, // Event not found
 		},
 		opNe: { // The inverse of opEq's cases
-			[2]string{"e1.foo", "e2.foo"}:       &fa,
-			[2]string{"e1.foo", "e3.foo"}:       &tr,
-			[2]string{"e2.bar", "e3.bar"}:       &fa,
-			[2]string{"e1.bar", "e3.bar"}:       &tr,
-			[2]string{"e1.foo", "e3.bazbazbas"}: &fa, // Attribute not found always return false
-			[2]string{"e1.foo", "e5.foo"}:       nil,
+			[2]string{"e1.foo", "e2.foo"}:       PredicateResultNegative,
+			[2]string{"e1.foo", "e3.foo"}:       PredicateResultPositive,
+			[2]string{"e2.bar", "e3.bar"}:       PredicateResultNegative,
+			[2]string{"e1.bar", "e3.bar"}:       PredicateResultPositive,
+			[2]string{"e1.foo", "e3.bazbazbas"}: PredicateResultNegative, // Attribute not found always return false
+			[2]string{"e1.foo", "e5.foo"}:       PredicateResultUncertain,
 		},
 		opLt: {
-			[2]string{"e1.num", "e3.num"}:       &tr,
-			[2]string{"e3.num", "e1.num"}:       &fa,
-			[2]string{"e1.num", "e2.num"}:       &fa,
-			[2]string{"e3.numfoo", "e1.numfoo"}: &fa, // Attribute not found always returns false
-			[2]string{"e1.foo", "e3.num"}:       &fa, // Wrong attribute type always returns false
-			[2]string{"e3.foo", "e1.num"}:       &fa,
+			[2]string{"e1.num", "e3.num"}:       PredicateResultPositive,
+			[2]string{"e3.num", "e1.num"}:       PredicateResultNegative,
+			[2]string{"e1.num", "e2.num"}:       PredicateResultNegative,
+			[2]string{"e3.numfoo", "e1.numfoo"}: PredicateResultNegative, // Attribute not found always returns false
+			[2]string{"e1.foo", "e3.num"}:       PredicateResultNegative, // Wrong attribute type always returns false
+			[2]string{"e3.foo", "e1.num"}:       PredicateResultNegative,
 		},
 		opGt: {
-			[2]string{"e1.num", "e3.num"}:       &fa,
-			[2]string{"e3.num", "e1.num"}:       &tr,
-			[2]string{"e1.num", "e2.num"}:       &fa,
-			[2]string{"e3.numfoo", "e1.numfoo"}: &fa, // Attribute not found always returns false
-			[2]string{"e1.foo", "e3.num"}:       &fa, // Wrong attribute type always returns false
-			[2]string{"e3.foo", "e1.num"}:       &fa,
+			[2]string{"e1.num", "e3.num"}:       PredicateResultNegative,
+			[2]string{"e3.num", "e1.num"}:       PredicateResultPositive,
+			[2]string{"e1.num", "e2.num"}:       PredicateResultNegative,
+			[2]string{"e3.numfoo", "e1.numfoo"}: PredicateResultNegative, // Attribute not found always returns false
+			[2]string{"e1.foo", "e3.num"}:       PredicateResultNegative, // Wrong attribute type always returns false
+			[2]string{"e3.foo", "e1.num"}:       PredicateResultNegative,
 		},
 		opLe: {
-			[2]string{"e1.num", "e3.num"}:       &tr,
-			[2]string{"e3.num", "e1.num"}:       &fa,
-			[2]string{"e1.num", "e2.num"}:       &tr,
-			[2]string{"e3.numfoo", "e1.numfoo"}: &fa, // Attribute not found always returns false
-			[2]string{"e1.foo", "e3.num"}:       &fa, // Wrong attribute type always returns false
-			[2]string{"e3.foo", "e1.num"}:       &fa,
+			[2]string{"e1.num", "e3.num"}:       PredicateResultPositive,
+			[2]string{"e3.num", "e1.num"}:       PredicateResultNegative,
+			[2]string{"e1.num", "e2.num"}:       PredicateResultPositive,
+			[2]string{"e3.numfoo", "e1.numfoo"}: PredicateResultNegative, // Attribute not found always returns false
+			[2]string{"e1.foo", "e3.num"}:       PredicateResultNegative, // Wrong attribute type always returns false
+			[2]string{"e3.foo", "e1.num"}:       PredicateResultNegative,
 		},
 		opGe: {
-			[2]string{"e1.num", "e3.num"}:       &fa,
-			[2]string{"e3.num", "e1.num"}:       &tr,
-			[2]string{"e1.num", "e2.num"}:       &tr,
-			[2]string{"e3.numfoo", "e1.numfoo"}: &fa, // Attribute not found always returns false
-			[2]string{"e1.foo", "e3.num"}:       &fa, // Wrong attribute type always returns false
-			[2]string{"e3.foo", "e1.num"}:       &fa,
+			[2]string{"e1.num", "e3.num"}:       PredicateResultNegative,
+			[2]string{"e3.num", "e1.num"}:       PredicateResultPositive,
+			[2]string{"e1.num", "e2.num"}:       PredicateResultPositive,
+			[2]string{"e3.numfoo", "e1.numfoo"}: PredicateResultNegative, // Attribute not found always returns false
+			[2]string{"e1.foo", "e3.num"}:       PredicateResultNegative, // Wrong attribute type always returns false
+			[2]string{"e3.foo", "e1.num"}:       PredicateResultNegative,
 		},
 	}
 
@@ -100,12 +99,8 @@ func TestOperatorPredicate(t *testing.T) {
 				op:    op,
 			}
 
-			if expectedResult == nil {
-				assert.Nil(t, impl.Evaluate(evs), fmt.Sprintf("Incorrect result for \"%s\"", impl.QueryText()))
-			} else {
-				assert.Equal(t, *expectedResult, *(impl.Evaluate(evs)), fmt.Sprintf("Incorrect result for \"%s\"",
-					impl.QueryText()))
-			}
+			assert.Equal(t, expectedResult, (impl.Evaluate(evs)), fmt.Sprintf("Incorrect result for \"%s\"",
+				impl.QueryText()))
 		}
 	}
 }

@@ -52,10 +52,9 @@ func (q *Query) ShouldCapture(e domain.Event) string {
 	return q.capture.Matches(e)
 }
 
-func (q *Query) Evaluate(evs domain.CapturedEvents) *bool {
+func (q *Query) Evaluate(evs domain.CapturedEvents) PredicateResult {
 	if q.predicate == nil {
-		t := true
-		return &t
+		return PredicateResultPositive
 	}
 	return q.predicate.Evaluate(evs)
 }

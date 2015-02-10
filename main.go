@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"os"
 
@@ -15,7 +16,8 @@ func main() {
 	bytes, _ := ioutil.ReadAll(os.Stdin)
 	query, err := query.Parse(string(bytes))
 	if err != nil {
-		panic(err)
+		fmt.Printf("Error parsing: %s\n", err.Error())
+		os.Exit(1)
 	}
-	panic(query.QueryText())
+	fmt.Println(query.QueryText())
 }
