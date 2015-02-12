@@ -40,6 +40,7 @@ func genEvents(length int) []domain.Event {
 		result[i] = &tEventImpl{
 			typ:   fmt.Sprintf("t%d", i),
 			attrs: lastAttrs,
+			ts:    time.Now(),
 		}
 	}
 	return result

@@ -9,13 +9,15 @@ import (
 
 type EventCapture interface {
 	Representable
-	// Names returns the types and local aliases of all captured events
-	Names() [][2]string
+	// Names returns a mapping of (local aliase: type) for all captured events
+	Names() map[string]string
 	// Matches determines whether the passed event should be captured. If so, the local name it should be captured
 	// under is returned. If not, an empty string is returned.
 	Matches(e domain.Event) string
-	// Negations returns the types and local aliases of captures that are negated
-	Negations() [][2]string
+	// Negations returns the local aliases of all negated events
+	Negations() []string
+	// aliases returns just the event aliases used (including duplicates)
+	aliases() []string
 }
 
 // A basicEventCapture represents a capture of a single event, determined by its type
@@ -36,12 +38,18 @@ func (c *basicEventCapture) QueryText() string {
 	return fmt.Sprintf("%s %s", c.eventType, c.name)
 }
 
-func (c *basicEventCapture) Negations() [][2]string {
+func (c *basicEventCapture) Negations() []string {
 	return nil
 }
 
-func (c *basicEventCapture) Names() [][2]string {
-	return [][2]string{{c.eventType, c.name}}
+func (c *basicEventCapture) Names() map[string]string {
+	return map[string]string{
+		c.name: c.eventType,
+	}
+}
+
+func (c *basicEventCapture) aliases() []string {
+	return []string{c.name}
 }
 
 // A seqEventCapture captures a sequence of events
@@ -69,18 +77,28 @@ func (c seqEventCapture) QueryText() string {
 	return buf.String()
 }
 
-func (c seqEventCapture) Negations() [][2]string {
-	result := make([][2]string, 0, len(c))
+func (c seqEventCapture) Negations() []string {
+	result := make([]string, 0)
 	for _, subCap := range c {
 		result = append(result, subCap.Negations()...)
 	}
 	return result
 }
 
-func (c seqEventCapture) Names() [][2]string {
-	result := make([][2]string, 0, len(c))
+func (c seqEventCapture) Names() map[string]string {
+	result := make(map[string]string, len(c))
 	for _, subCap := range c {
-		result = append(result, subCap.Names()...)
+		for k, v := range subCap.Names() {
+			result[k] = v
+		}
+	}
+	return result
+}
+
+func (c seqEventCapture) aliases() []string {
+	result := make([]string, 0, len(c))
+	for _, subCap := range c {
+		result = append(result, subCap.aliases()...)
 	}
 	return result
 }
@@ -110,18 +128,28 @@ func (c anyEventCapture) QueryText() string {
 	return buf.String()
 }
 
-func (c anyEventCapture) Negations() [][2]string {
-	result := make([][2]string, 0, len(c))
+func (c anyEventCapture) Negations() []string {
+	result := make([]string, 0)
 	for _, subCap := range c {
 		result = append(result, subCap.Negations()...)
 	}
 	return result
 }
 
-func (c anyEventCapture) Names() [][2]string {
-	result := make([][2]string, 0, len(c))
+func (c anyEventCapture) Names() map[string]string {
+	result := make(map[string]string, len(c))
 	for _, subCap := range c {
-		result = append(result, subCap.Names()...)
+		for k, v := range subCap.Names() {
+			result[k] = v
+		}
+	}
+	return result
+}
+
+func (c anyEventCapture) aliases() []string {
+	result := make([]string, 0, len(c))
+	for _, subCap := range c {
+		result = append(result, subCap.aliases()...)
 	}
 	return result
 }
@@ -136,19 +164,17 @@ func (c *negatedEventCapture) QueryText() string {
 	return fmt.Sprintf("!(%s)", c.EventCapture.QueryText())
 }
 
-func (c *negatedEventCapture) Negations() [][2]string {
+func (c *negatedEventCapture) Negations() []string {
 	subNegations := c.EventCapture.Negations()
-	result := make([][2]string, 0)
-
+	result := make([]string, 0)
 candidateLoop:
-	for _, nameSpec := range c.Names() {
-		for _, negSpec := range subNegations {
-			if nameSpec[0] == negSpec[0] && nameSpec[1] == negSpec[1] {
+	for alias, _ := range c.Names() {
+		for _, negatedAlias := range subNegations {
+			if alias == negatedAlias {
 				continue candidateLoop
 			}
-			result = append(result, nameSpec)
 		}
+		result = append(result, alias)
 	}
-
 	return result
 }

@@ -3,6 +3,7 @@ package query
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/assert"
 
@@ -17,6 +18,7 @@ func TestOperatorPredicate(t *testing.T) {
 			"bar": "bar",
 			"num": float64(1.5),
 		},
+		ts: time.Now(),
 	}
 	e2 := &tEventImpl{
 		typ: "e2",
@@ -25,6 +27,7 @@ func TestOperatorPredicate(t *testing.T) {
 			"bar": "baz",
 			"num": float64(1.5),
 		},
+		ts: time.Now(),
 	}
 	e3 := &tEventImpl{
 		typ: "e3",
@@ -33,6 +36,7 @@ func TestOperatorPredicate(t *testing.T) {
 			"bar": "baz",
 			"num": float64(2.0),
 		},
+		ts: time.Now(),
 	}
 	evs := domain.CapturedEvents{
 		"e1": e1,

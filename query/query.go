@@ -46,10 +46,15 @@ func (q *Query) Window() time.Duration {
 	return q.window
 }
 
-// Returns whether this query is interested in the passed event. If so, the alias under which it should be captured is
-// returned.
+// ShouldCapture returns whether this query is interested in the passed event. If so, the alias under which it should be
+// captured is returned.
 func (q *Query) ShouldCapture(e domain.Event) string {
 	return q.capture.Matches(e)
+}
+
+// Captures returns a mapping of (local alias: type) for all captured events
+func (q *Query) Captures() map[string]string {
+	return q.capture.Names()
 }
 
 func (q *Query) Evaluate(evs domain.CapturedEvents) PredicateResult {
@@ -65,15 +70,12 @@ func (q *Query) validate() error {
 	}
 
 	// Check for overlapping aliases
-	seenAliases := make(map[string]bool)
-	duplicateAliases := make([]string, 0)
-	for _, captureName := range q.capture.Names() {
-		alias := captureName[1]
+	seenAliases, duplicateAliases := make(map[string]bool), make([]string, 0)
+	for _, alias := range q.capture.aliases() {
 		if _, ok := seenAliases[alias]; ok {
 			duplicateAliases = append(duplicateAliases, alias)
-		} else {
-			seenAliases[alias] = true
 		}
+		seenAliases[alias] = true
 	}
 	if len(duplicateAliases) > 0 {
 		return fmt.Errorf("Query has duplicate aliases %s", strings.Join(duplicateAliases, ", "))

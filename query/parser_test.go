@@ -96,6 +96,32 @@ func TestParsing(t *testing.T) {
 	}
 }
 
+func TestParsingCaptureNames(t *testing.T) {
+	expectations := map[string]map[string]string{ // query text: [alias: type…]
+		"EVENT SEQ(t a, t b) WHERE a.n == b.n": {
+			"a": "t",
+			"b": "t",
+		},
+		"EVENT SEQ(t a, t b, !(t c))": {
+			"a": "t",
+			"b": "t",
+			"c": "t",
+		},
+		"EVENT SEQ(t1 e1, t2 e2, ANY(t3 e3, t4 e4))": {
+			"e1": "t1",
+			"e2": "t2",
+			"e3": "t3",
+			"e4": "t4",
+		},
+	}
+
+	for queryText, expectedCaptures := range expectations {
+		q, err := Parse(queryText)
+		assert.NoError(t, err, fmt.Sprintf("Error parsing %s", queryText))
+		assert.Equal(t, expectedCaptures, q.Captures(), "Unexpected capture result")
+	}
+}
+
 func BenchmarkParsing(b *testing.B) {
 	queryText := "EVENT SEQ(t1 e1, ANY(t2 e2, t3 e3), !(t4 e4), t5, e5) WHERE e1.foo == e2.bar AND e3.baz == e4.boop WITHIN 2h;"
 	for i := 0; i < b.N; i++ {
