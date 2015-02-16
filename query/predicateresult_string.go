@@ -6,16 +6,11 @@ import "fmt"
 
 const _PredicateResult_name = "PredicateResultPositivePredicateResultNegativePredicateResultUncertain"
 
-var _PredicateResult_index = [...]uint8{23, 46, 70}
+var _PredicateResult_index = [...]uint8{0, 23, 46, 70}
 
 func (i PredicateResult) String() string {
-	if i >= PredicateResult(len(_PredicateResult_index)) {
+	if i+1 >= PredicateResult(len(_PredicateResult_index)) {
 		return fmt.Sprintf("PredicateResult(%d)", i)
 	}
-	hi := _PredicateResult_index[i]
-	lo := uint8(0)
-	if i > 0 {
-		lo = _PredicateResult_index[i-1]
-	}
-	return _PredicateResult_name[lo:hi]
+	return _PredicateResult_name[_PredicateResult_index[i]:_PredicateResult_index[i+1]]
 }

@@ -4,18 +4,13 @@ package query
 
 import "fmt"
 
-const _tt_name = "ttGenericttNumericLiteralttStringLiteralttEventClausettEventDeclttEventDeclTypettEventDeclAliasttSeqDeclttNegatedDeclttAnyDeclttWhereClausettEqttNettGtttLtttGettLettAttributeSelectorttConjunctionttDisjunctionttPredicatettWithinClausettDuration"
+const _tt_name = "ttGenericttNumericLiteralttStringLiteralttEventClausettEventDeclttEventDeclTypettEventDeclAliasttSeqDeclttNegatedDeclttAnyDeclttWhereClausettEqttNettGtttLtttGettLettAttributeSelectorttEquivalenceTestttConjunctionttDisjunctionttPredicatettWithinClausettDuration"
 
-var _tt_index = [...]uint8{9, 25, 40, 53, 64, 79, 95, 104, 117, 126, 139, 143, 147, 151, 155, 159, 163, 182, 195, 208, 219, 233, 243}
+var _tt_index = [...]uint16{0, 9, 25, 40, 53, 64, 79, 95, 104, 117, 126, 139, 143, 147, 151, 155, 159, 163, 182, 199, 212, 225, 236, 250, 260}
 
 func (i tt) String() string {
-	if i >= tt(len(_tt_index)) {
+	if i+1 >= tt(len(_tt_index)) {
 		return fmt.Sprintf("tt(%d)", i)
 	}
-	hi := _tt_index[i]
-	lo := uint8(0)
-	if i > 0 {
-		lo = _tt_index[i-1]
-	}
-	return _tt_name[lo:hi]
+	return _tt_name[_tt_index[i]:_tt_index[i+1]]
 }

@@ -48,7 +48,7 @@ func postprocessTokens(tokens []*token) ([]*token, error) {
 	for _, t := range tokens {
 		switch t.tt {
 		// Crufty: find all root-level predicates and connectives, stick them inside a ttWhereClause token.
-		case ttPredicate, ttConjunction, ttDisjunction:
+		case ttPredicate, ttConjunction, ttDisjunction, ttEquivalenceTest:
 			whereToken.children = append(whereToken.children, t)
 
 		default:
@@ -221,6 +221,9 @@ func parseWhereClauseToken(t *token) (Predicate, error) {
 		} else {
 			return result[0], nil
 		}
+
+	case ttEquivalenceTest:
+		return equivalenceTestPredicate(t.content), nil
 
 	default:
 		return nil, fmt.Errorf("Unhandled token type: %s", t.tt.String())

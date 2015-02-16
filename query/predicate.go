@@ -197,3 +197,37 @@ func (p *operatorPredicate) usedAliases() []string {
 	}
 	return result
 }
+
+type equivalenceTestPredicate string // Holds the equivalence key path
+
+func (p equivalenceTestPredicate) Evaluate(evs domain.CapturedEvents) PredicateResult {
+	var (
+		lastVal interface{}
+		i       = 0
+	)
+	for alias, _ := range evs {
+		if val, err := attributeLookup(fmt.Sprintf("%s.%s", alias, p)).Value(evs); err != nil {
+			if err == ErrEventNotFound {
+				return PredicateResultUncertain
+			} else if err != nil {
+				log.Errorf("[sase:equivalenceTestPredicate] Could not evaluate %s left/right: %s", p.QueryText(), err.Error())
+				return PredicateResultNegative // Terminate this match
+			}
+		} else {
+			if i > 0 && !reflect.DeepEqual(lastVal, val) {
+				return PredicateResultNegative
+			}
+			lastVal = val
+			i++
+		}
+	}
+	return PredicateResultPositive
+}
+
+func (p equivalenceTestPredicate) QueryText() string {
+	return fmt.Sprintf("[%s]", p)
+}
+
+func (p equivalenceTestPredicate) usedAliases() []string { // Not much we can do here :(
+	return nil
+}

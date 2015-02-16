@@ -194,6 +194,15 @@ func tokenize(data string) ([]*token, error) {
                 %{ commit(ttStringLiteral) };
             StringLiteral = (SingleQuotedStringLiteral | DoubleQuotedStringLiteral);
             
+            Equivalence =
+                "[" Space*
+                >mark
+                >{ propose(ttEquivalenceTest) }
+                Identifier
+                %{ setText(ttEquivalenceTest) }
+                Space* "]"
+                %{ commit(ttEquivalenceTest) };
+            
             AttributeSelector =
                 Identifier
                 >mark
@@ -207,7 +216,7 @@ func tokenize(data string) ([]*token, error) {
                 Space* Comparison Space*
                 (StringLiteral | NumericLiteral | AttributeSelector)
                 %{ commit(ttPredicate) };
-            Predicate = PredicateArg (Space+ Connective Space+ PredicateArg)*;
+            Predicate = (PredicateArg | Equivalence) (Space+ Connective Space+ (PredicateArg | Equivalence))*;
             
             WhereClause = "WHERE"i Space+ Predicate;
         
