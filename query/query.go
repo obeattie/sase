@@ -58,10 +58,11 @@ func (q *Query) Captures() map[string]string {
 }
 
 func (q *Query) Evaluate(evs domain.CapturedEvents) PredicateResult {
-	if q.predicate == nil {
-		return PredicateResultPositive
+	if result := q.capture.evaluate(evs); result == PredicateResultNegative || q.predicate == nil {
+		return result
+	} else {
+		return result.And(q.predicate.Evaluate(evs))
 	}
-	return q.predicate.Evaluate(evs)
 }
 
 func (q *Query) validate() error {

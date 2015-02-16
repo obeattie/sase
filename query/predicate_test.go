@@ -10,6 +10,46 @@ import (
 	"github.com/obeattie/sase/domain"
 )
 
+func TestPredicateResultAnd(t *testing.T) {
+	expectations := map[[2]PredicateResult]PredicateResult{
+		[2]PredicateResult{PredicateResultNegative, PredicateResultNegative}:   PredicateResultNegative,
+		[2]PredicateResult{PredicateResultNegative, PredicateResultPositive}:   PredicateResultNegative,
+		[2]PredicateResult{PredicateResultNegative, PredicateResultUncertain}:  PredicateResultNegative,
+		[2]PredicateResult{PredicateResultPositive, PredicateResultNegative}:   PredicateResultNegative,
+		[2]PredicateResult{PredicateResultPositive, PredicateResultPositive}:   PredicateResultPositive,
+		[2]PredicateResult{PredicateResultPositive, PredicateResultUncertain}:  PredicateResultUncertain,
+		[2]PredicateResult{PredicateResultUncertain, PredicateResultNegative}:  PredicateResultNegative,
+		[2]PredicateResult{PredicateResultUncertain, PredicateResultPositive}:  PredicateResultUncertain,
+		[2]PredicateResult{PredicateResultUncertain, PredicateResultUncertain}: PredicateResultUncertain,
+	}
+
+	for inputs, expected := range expectations {
+		actual := inputs[0].And(inputs[1])
+		assert.Equal(t, expected.String(), actual.String(), fmt.Sprintf("%s AND %s", inputs[0].String(),
+			inputs[1].String()))
+	}
+}
+
+func TestPredicateResultOr(t *testing.T) {
+	expectations := map[[2]PredicateResult]PredicateResult{
+		[2]PredicateResult{PredicateResultNegative, PredicateResultNegative}:   PredicateResultNegative,
+		[2]PredicateResult{PredicateResultNegative, PredicateResultPositive}:   PredicateResultPositive,
+		[2]PredicateResult{PredicateResultNegative, PredicateResultUncertain}:  PredicateResultUncertain,
+		[2]PredicateResult{PredicateResultPositive, PredicateResultNegative}:   PredicateResultPositive,
+		[2]PredicateResult{PredicateResultPositive, PredicateResultPositive}:   PredicateResultPositive,
+		[2]PredicateResult{PredicateResultPositive, PredicateResultUncertain}:  PredicateResultPositive,
+		[2]PredicateResult{PredicateResultUncertain, PredicateResultNegative}:  PredicateResultUncertain,
+		[2]PredicateResult{PredicateResultUncertain, PredicateResultPositive}:  PredicateResultPositive,
+		[2]PredicateResult{PredicateResultUncertain, PredicateResultUncertain}: PredicateResultUncertain,
+	}
+
+	for inputs, expected := range expectations {
+		actual := inputs[0].Or(inputs[1])
+		assert.Equal(t, expected.String(), actual.String(), fmt.Sprintf("%s OR %s", inputs[0].String(),
+			inputs[1].String()))
+	}
+}
+
 func TestOperatorPredicate(t *testing.T) {
 	e1 := &tEventImpl{
 		typ: "e1",

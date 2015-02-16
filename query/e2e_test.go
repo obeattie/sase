@@ -24,7 +24,10 @@ func genEvents(length int) []domain.Event {
 		"string",
 	}
 
-	var lastAttrs map[string]interface{}
+	var (
+		lastAttrs map[string]interface{}
+		lastTs    = time.Date(2014, 1, 1, 0, 0, 0, 0, time.UTC)
+	)
 	newAttrs := func(key string) map[string]interface{} {
 		ret := make(map[string]interface{}, len(lastAttrs))
 		for k, v := range lastAttrs {
@@ -36,11 +39,12 @@ func genEvents(length int) []domain.Event {
 
 	for i := 0; i < length; i++ {
 		key := fmt.Sprintf("e%d", i)
+		lastTs = lastTs.Add(1 * time.Minute)
 		lastAttrs = newAttrs(key)
 		result[i] = &tEventImpl{
 			typ:   fmt.Sprintf("t%d", i),
 			attrs: lastAttrs,
-			ts:    time.Now(),
+			ts:    lastTs,
 		}
 	}
 	return result
@@ -49,12 +53,14 @@ func genEvents(length int) []domain.Event {
 func TestE2E(t *testing.T) {
 	events := genEvents(100)
 	queries := map[string]PredicateResult{
-		"EVENT t0 e0":                                             PredicateResultPositive, // No predicate should match
-		"EVENT t0 e0 WHERE e0.foobar == e0.foobaz":                PredicateResultNegative, // Nonexistent events
-		"EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 == e1.e0":            PredicateResultPositive,
-		"EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 != e1.e0":            PredicateResultNegative,
-		"EVENT SEQ(t0 e0, t1000 e1) WHERE e0.e0 == e1.e0":         PredicateResultUncertain, // Incomplete events
-		"EVENT SEQ(t0 e0, t1 e1, t1000 e2) WHERE e0.e0 != e1.e0;": PredicateResultNegative,  // Incomplete events but known to not match
+		"EVENT t0 e0":                                            PredicateResultPositive, // No predicate should match
+		"EVENT t0 e0 WHERE e0.foobar == e0.foobaz":               PredicateResultNegative, // Nonexistent events
+		"EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 == e1.e0":           PredicateResultPositive,
+		"EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 != e1.e0":           PredicateResultNegative,
+		"EVENT SEQ(t0 e0, t1000 e1) WHERE e0.e0 == e1.e0":        PredicateResultUncertain, // Incomplete events
+		"EVENT SEQ(t0 e0, t1 e1, t1000 e2) WHERE e0.e0 != e1.e0": PredicateResultNegative,  // Incomplete events but known to not match
+		"EVENT SEQ(t1 e1, t0 e0)":                                PredicateResultNegative,  // SEQ out of order
+		"EVENT SEQ(t0 e0, !(t1 e1), t2 e2)":                      PredicateResultNegative,
 	}
 
 	for queryText, expectedResult := range queries {
@@ -70,6 +76,6 @@ func TestE2E(t *testing.T) {
 		assert.NotEmpty(t, capturedEvents, "No events captured for \"%s\"", queryText)
 
 		result := q.Evaluate(capturedEvents)
-		assert.Equal(t, expectedResult, result, fmt.Sprintf("Incorrect capture value for \"%s\"", queryText))
+		assert.Equal(t, expectedResult.String(), result.String(), fmt.Sprintf("Incorrect result for \"%s\"", queryText))
 	}
 }

@@ -13,5 +13,6 @@ type Event interface {
 	When() time.Time
 }
 
-// CapturedEvents represents an event sequence that has been captured from an input stream (or streams) by a query.
+// CapturedEvents represents an event sequence that has been captured from an input stream (or streams) by a query,
+// mapping aliases to actual events
 type CapturedEvents map[string]Event

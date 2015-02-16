@@ -22,9 +22,29 @@ func leftRightVals(evs domain.CapturedEvents, left, right value) (interface{}, i
 	}
 }
 
-//go:generate stringer -type=PredicateResult
-
 type PredicateResult uint8
+
+func (r PredicateResult) And(r2 PredicateResult) PredicateResult {
+	if r == r2 {
+		return r
+	} else if r == PredicateResultNegative || r2 == PredicateResultNegative {
+		return PredicateResultNegative
+	} else {
+		return PredicateResultUncertain
+	}
+}
+
+func (r PredicateResult) Or(r2 PredicateResult) PredicateResult {
+	if r == PredicateResultPositive || r2 == PredicateResultPositive {
+		return PredicateResultPositive
+	} else if r == PredicateResultUncertain || r2 == PredicateResultUncertain {
+		return PredicateResultUncertain
+	} else {
+		return PredicateResultNegative
+	}
+}
+
+//go:generate stringer -type=PredicateResult
 
 const (
 	// PredicateResultPositive indicates a positive event match
@@ -38,10 +58,7 @@ const (
 
 type Predicate interface {
 	Representable
-	// Evaluates the predicate against the set of captured events, returning its match status. It returns a bool pointer
-	// so that it may return nil, which means that with the current event set, it's not possible to evaluate the
-	// predicate (ie. it refers to events which have not yet been captured).
-	// TODO: Handle nil values higher up to always terminate a candidate when its event sequence is known to be complete.
+	// Evaluates the predicate against the set of captured events, returning its match status.
 	Evaluate(domain.CapturedEvents) PredicateResult
 	// usedAliases returns the events aliases which are consulted during evaluation
 	usedAliases() []string

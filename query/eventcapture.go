@@ -3,13 +3,14 @@ package query
 import (
 	"bytes"
 	"fmt"
+	"time"
 
 	"github.com/obeattie/sase/domain"
 )
 
 type EventCapture interface {
 	Representable
-	// Names returns a mapping of (local aliase: type) for all captured events
+	// Names returns a mapping of (local alias: type) for all captured events
 	Names() map[string]string
 	// Matches determines whether the passed event should be captured. If so, the local name it should be captured
 	// under is returned. If not, an empty string is returned.
@@ -18,6 +19,8 @@ type EventCapture interface {
 	Negations() []string
 	// aliases returns just the event aliases used (including duplicates)
 	aliases() []string
+	// evaluate allows the capture to participate in the matching phase, primarily so it may veto a match
+	evaluate(domain.CapturedEvents) PredicateResult
 }
 
 // A basicEventCapture represents a capture of a single event, determined by its type
@@ -50,6 +53,16 @@ func (c *basicEventCapture) Names() map[string]string {
 
 func (c *basicEventCapture) aliases() []string {
 	return []string{c.name}
+}
+
+func (c *basicEventCapture) evaluate(evs domain.CapturedEvents) PredicateResult {
+	if e, ok := evs[c.name]; !ok { // Not yet matched
+		return PredicateResultUncertain
+	} else if e.Type() != c.eventType { // Incorrect type
+		return PredicateResultNegative
+	} else { // Correct type
+		return PredicateResultPositive
+	}
 }
 
 // A seqEventCapture captures a sequence of events
@@ -100,6 +113,32 @@ func (c seqEventCapture) aliases() []string {
 	for _, subCap := range c {
 		result = append(result, subCap.aliases()...)
 	}
+	return result
+}
+
+func (c seqEventCapture) evaluate(evs domain.CapturedEvents) PredicateResult {
+	result := PredicateResultUncertain
+	for i, subCap := range c {
+		if sr := subCap.evaluate(evs); i == 0 {
+			result = sr
+		} else {
+			result = result.And(sr)
+		}
+	}
+
+	if result != PredicateResultNegative { // Ensure the captures are actually in sequence
+		var lastTs time.Time
+		for _, alias := range c.aliases() {
+			if ev, ok := evs[alias]; ok {
+				when := ev.When()
+				if when.Before(lastTs) {
+					return PredicateResultNegative
+				}
+				lastTs = when
+			}
+		}
+	}
+
 	return result
 }
 
@@ -154,6 +193,18 @@ func (c anyEventCapture) aliases() []string {
 	return result
 }
 
+func (c anyEventCapture) evaluate(evs domain.CapturedEvents) PredicateResult {
+	result := PredicateResultUncertain
+	for i, subCap := range c {
+		if sr := subCap.evaluate(evs); i == 0 {
+			result = sr
+		} else {
+			result = result.Or(sr)
+		}
+	}
+	return result
+}
+
 // A negatedEventCapture still captures the event, but reports it as being a negated event (this is significant in later
 // processing)
 type negatedEventCapture struct {
@@ -177,4 +228,12 @@ candidateLoop:
 		result = append(result, alias)
 	}
 	return result
+}
+
+func (c *negatedEventCapture) evaluate(evs domain.CapturedEvents) PredicateResult {
+	if result := c.EventCapture.evaluate(evs); result == PredicateResultPositive {
+		return PredicateResultNegative
+	} else {
+		return result
+	}
 }
