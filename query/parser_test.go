@@ -3,6 +3,7 @@ package query
 import (
 	"fmt"
 	"testing"
+	"time"
 
 	log "github.com/cihub/seelog"
 	"github.com/stretchr/testify/assert"
@@ -119,6 +120,22 @@ func TestParsingCaptureNames(t *testing.T) {
 		q, err := Parse(queryText)
 		assert.NoError(t, err, fmt.Sprintf("Error parsing %s", queryText))
 		assert.Equal(t, expectedCaptures, q.Captures(), "Unexpected capture result")
+	}
+}
+
+func TestParsingWindow(t *testing.T) {
+	expectations := map[string]time.Duration{
+		"1m":    time.Minute,
+		"10m":   10 * time.Minute,
+		"1h":    time.Hour,
+		"1h10m": time.Hour + 10*time.Minute,
+	}
+
+	for queryText, expectedDuration := range expectations {
+		t.Logf("Trying %s (%s)", queryText, expectedDuration.String())
+		q, err := Parse("EVENT t0 e0 WITHIN " + queryText)
+		assert.NoError(t, err)
+		assert.Equal(t, expectedDuration, q.Window())
 	}
 }
 

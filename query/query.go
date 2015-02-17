@@ -38,7 +38,6 @@ func (q *Query) QueryText() string {
 		buf.WriteString(" WITHIN ")
 		buf.WriteString(q.window.String())
 	}
-	buf.WriteString(";")
 	return buf.String()
 }
 
@@ -58,11 +57,30 @@ func (q *Query) Captures() map[string]string {
 }
 
 func (q *Query) Evaluate(evs domain.CapturedEvents) PredicateResult {
-	if result := q.capture.evaluate(evs); result == PredicateResultNegative || q.predicate == nil {
-		return result
-	} else {
-		return result.And(q.predicate.Evaluate(evs))
+	result := q.capture.evaluate(evs)
+	if q.predicate != nil {
+		result = result.And(q.predicate.Evaluate(evs))
 	}
+	return result.And(q.windowResult(evs))
+}
+
+func (q *Query) windowResult(evs domain.CapturedEvents) PredicateResult {
+	if q.window > 0 {
+		var earliest, latest time.Time
+		for _, ev := range evs {
+			w := ev.When()
+			if w.Before(earliest) || earliest.IsZero() {
+				earliest = w
+			}
+			if w.After(latest) || latest.IsZero() {
+				latest = w
+			}
+		}
+		if latest.Sub(earliest) > q.window {
+			return PredicateResultNegative
+		}
+	}
+	return PredicateResultPositive
 }
 
 func (q *Query) validate() error {

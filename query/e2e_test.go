@@ -13,11 +13,12 @@ import (
 
 /* GenEvents returns a slice of events of the given length. These events:
 
-   * Will have aliases "e{{n}}", where n is its index in the slice (0-indexed)
-   * Will have a type "t{{n}}", where n is the same value as above
-   * Will have all the attributes of the previous event, with an additional attribute (randomly chosen from a map of
+   * have aliases "e{{n}}", where n is its index in the slice (0-indexed)
+   * have a type "t{{n}}", where n is the same value as above
+   * have all the attributes of the previous event, with an additional attribute (randomly chosen from a map of
      candidates).
-   * Will have static attributes "map", "array", "decimal", "string", and "stringdecimal"
+   * have static attributes "map", "array", "decimal", "string", and "stringdecimal"
+   * are sepearated by 1 minute intervals
 */
 func genEvents(length int) []domain.Event {
 	result := make([]domain.Event, length)
@@ -100,7 +101,16 @@ func TestE2E(t *testing.T) {
 		`EVENT SEQ(t0 e0) WHERE [string]`:                                      PredicateResultPositive,  // Equivalence test
 		`EVENT SEQ(t0 e0, t1 e1, t2 e2) WHERE [string]`:                        PredicateResultPositive,  // Equivalence test
 		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1]`:                                   PredicateResultNegative,  // e1 attr will be missing from e0
-		`EVENT SEQ(t0 e0, e1 e1, t1000 e1000) WHERE [string]`:                  PredicateResultUncertain, // No t1000
+		`EVENT SEQ(t0 e0, t1 e1, t1000 e1000) WHERE [string]`:                  PredicateResultUncertain, // No t1000
+		`EVENT SEQ(t0 e0, t1 e1) WHERE [string] AND e0.decimal == e1.decimal`:  PredicateResultPositive,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1] AND e0.decimal == e1.decimal`:      PredicateResultNegative,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1] OR e0.decimal == e1.decimal`:       PredicateResultPositive,
+
+		// Window tests
+		`EVENT SEQ(t0 e0, t10 e10) WITHIN 1m`:    PredicateResultNegative, // e0 and e10 are 10 minutes apart
+		`EVENT SEQ(t0 e0, t10 e10) WITHIN 10m`:   PredicateResultPositive,
+		`EVENT SEQ(t0 e0, t10 e10) WITHIN 1h`:    PredicateResultPositive,
+		`EVENT SEQ(t0 e0, t10 e10) WITHIN 9m59s`: PredicateResultNegative,
 	}
 
 	for queryText, expectedResult := range queries {
