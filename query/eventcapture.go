@@ -56,7 +56,7 @@ func (c *basicEventCapture) aliases() []string {
 
 func (c *basicEventCapture) evaluate(evs domain.CapturedEvents) PredicateResult {
 	if e, ok := evs[c.name]; !ok { // Not yet matched
-		return PredicateResultUncertainz
+		return PredicateResultUncertain
 	} else if e.Type() != c.eventType { // Incorrect type
 		return PredicateResultNegative
 	} else { // Correct type
