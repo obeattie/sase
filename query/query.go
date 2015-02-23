@@ -45,9 +45,8 @@ func (q *Query) Window() time.Duration {
 	return q.window
 }
 
-// ShouldCapture returns whether this query is interested in the passed event. If so, the alias under which it should be
-// captured is returned.
-func (q *Query) ShouldCapture(e domain.Event) string {
+// CaptureAliases the aliases under which the event should be captured.
+func (q *Query) CaptureAliases(e domain.Event) []string {
 	return q.capture.Matches(e)
 }
 

@@ -12,9 +12,8 @@ type EventCapture interface {
 	Representable
 	// Names returns a mapping of (local alias: type) for all captured events
 	Names() map[string]string
-	// Matches determines whether the passed event should be captured. If so, the local name it should be captured
-	// under is returned. If not, an empty string is returned.
-	Matches(e domain.Event) string
+	// Matches determines whether the passed event should be captured, returning local name(s) it should be capture as.
+	Matches(e domain.Event) []string
 	// Negations returns the local aliases of all negated events
 	Negations() []string
 	// aliases returns just the event aliases used (including duplicates)
@@ -29,11 +28,11 @@ type basicEventCapture struct {
 	name      string
 }
 
-func (c *basicEventCapture) Matches(e domain.Event) string {
+func (c *basicEventCapture) Matches(e domain.Event) []string {
 	if c.eventType == e.Type() {
-		return c.name
+		return []string{c.name}
 	} else {
-		return ""
+		return nil
 	}
 }
 
@@ -57,7 +56,7 @@ func (c *basicEventCapture) aliases() []string {
 
 func (c *basicEventCapture) evaluate(evs domain.CapturedEvents) PredicateResult {
 	if e, ok := evs[c.name]; !ok { // Not yet matched
-		return PredicateResultUncertain
+		return PredicateResultUncertainz
 	} else if e.Type() != c.eventType { // Incorrect type
 		return PredicateResultNegative
 	} else { // Correct type
@@ -68,13 +67,14 @@ func (c *basicEventCapture) evaluate(evs domain.CapturedEvents) PredicateResult 
 // A seqEventCapture captures a sequence of events
 type seqEventCapture []EventCapture
 
-func (c seqEventCapture) Matches(e domain.Event) string {
+func (c seqEventCapture) Matches(e domain.Event) []string {
+	var result []string
 	for _, subCap := range c {
-		if alias := subCap.Matches(e); alias != "" {
-			return alias
+		if aliases := subCap.Matches(e); len(aliases) > 0 {
+			result = append(result, aliases...)
 		}
 	}
-	return ""
+	return result
 }
 
 func (c seqEventCapture) QueryText() string {
@@ -86,7 +86,7 @@ func (c seqEventCapture) QueryText() string {
 		}
 		buf.WriteString(subCap.QueryText())
 	}
-	buf.WriteString(")")
+	buf.WriteRune(')')
 	return buf.String()
 }
 
@@ -145,13 +145,14 @@ func (c seqEventCapture) evaluate(evs domain.CapturedEvents) PredicateResult {
 // An anyEventCapture will capture a match of any of its contained captures
 type anyEventCapture []EventCapture
 
-func (c anyEventCapture) Matches(e domain.Event) string {
+func (c anyEventCapture) Matches(e domain.Event) []string {
+	var result []string
 	for _, subCap := range c {
-		if alias := subCap.Matches(e); alias != "" {
-			return alias
+		if aliases := subCap.Matches(e); len(aliases) > 0 {
+			result = append(result, aliases...)
 		}
 	}
-	return ""
+	return result
 }
 
 func (c anyEventCapture) QueryText() string {

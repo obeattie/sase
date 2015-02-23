@@ -67,65 +67,133 @@ func genEvents(length int) []domain.Event {
 	return result
 }
 
+func genStacks(evs []domain.Event, q *Query) []domain.CapturedEvents {
+	result := make([]domain.CapturedEvents, 0)
+	for _, e := range evs {
+		for _, alias := range q.CaptureAliases(e) {
+			// Add to any stacks that accept this event
+			newStacks := make([]domain.CapturedEvents, 0)
+		acceptingLoop:
+			for _, stack := range result {
+				if _, ok := stack[alias]; ok {
+					continue acceptingLoop
+				}
+				for _, ev := range stack {
+					if ev == e { // Can't insert a duplicate
+						continue acceptingLoop
+					}
+				}
+				newStack := domain.CapturedEvents{}
+				for k, v := range stack {
+					newStack[k] = v
+				}
+				newStack[alias] = e
+				newStacks = append(newStacks, newStack)
+			}
+			result = append(result, newStacks...)
+
+			// Create a new (virgin) stack with this capture and no others
+			result = append(result, domain.CapturedEvents{alias: e})
+		}
+	}
+	return result
+}
+
 func TestE2E(t *testing.T) {
 	events := genEvents(100)
-	queries := map[string]PredicateResult{
-		`EVENT t0 e0`:                                            PredicateResultPositive, // No predicate should match
-		`EVENT t0 e0 WHERE e0.foobar == e0.foobaz`:               PredicateResultNegative, // Nonexistent events
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 == e1.e0`:           PredicateResultPositive,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 != e1.e0`:           PredicateResultNegative,
-		`EVENT SEQ(t0 e0, t1000 e1) WHERE e0.e0 == e1.e0`:        PredicateResultUncertain, // Incomplete events
-		`EVENT SEQ(t0 e0, t1 e1, t1000 e2) WHERE e0.e0 != e1.e0`: PredicateResultNegative,  // Incomplete events but known to not match
-		`EVENT SEQ(t1 e1, t0 e0)`:                                PredicateResultNegative,  // SEQ out of order
-		`EVENT SEQ(t0 e0, !(t1 e1), t2 e2)`:                      PredicateResultNegative,  // Negated event is in stream
+	queries := map[string]bool{ // true = one positive match
+		`EVENT t0 e0`:                                            true,  // No predicate should match
+		`EVENT t0 e0 WHERE e0.foobar == e0.foobaz`:               false, // Nonexistent events
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 == e1.e0`:           true,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 != e1.e0`:           false,
+		`EVENT SEQ(t0 e0, t1000 e1) WHERE e0.e0 == e1.e0`:        false, // Incomplete events
+		`EVENT SEQ(t0 e0, t1 e1, t1000 e2) WHERE e0.e0 != e1.e0`: false, // Incomplete events but known to not match
+		`EVENT SEQ(t1 e1, t0 e0)`:                                false, // SEQ out of order
+		`EVENT SEQ(t0 e0, !(t1 e1), t2 e2)`:                      false, // Negated event is in stream
 
 		// Attribute tests
-		`EVENT t0 e0 WHERE e0.string == "astring"`:                             PredicateResultPositive,
-		`EVENT t0 e0 WHERE e0.nonexistent == 1`:                                PredicateResultNegative,
-		`EVENT t0 e0 WHERE e0.stringdecimal == 1.0`:                            PredicateResultNegative, // Wrong type
-		`EVENT t0 e0 WHERE e0.decimal == 100`:                                  PredicateResultPositive,
-		`EVENT t0 e0 WHERE e0.decimal == 100.0`:                                PredicateResultPositive,
-		`EVENT t0 e0 WHERE e0.decimal == 100.00000000`:                         PredicateResultPositive,
-		`EVENT t0 e0 WHERE e0.decimal == 0000100.00`:                           PredicateResultPositive, // Different padding
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.decimal == e1.decimal`:               PredicateResultPositive,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.array == e1.array`:                   PredicateResultPositive,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.string == e1.string`:                 PredicateResultPositive,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.stringdecimal == e1.stringdecimal`:   PredicateResultPositive,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.map == e1.map`:                       PredicateResultPositive, // Static attibutes
-		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.decimal == e1.decimal`:             PredicateResultPositive,
-		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.array == e1.array`:                 PredicateResultPositive,
-		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.string == e1.string`:               PredicateResultPositive,
-		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.stringdecimal == e1.stringdecimal`: PredicateResultPositive,
-		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.map == e1.map`:                     PredicateResultPositive,
-		`EVENT t0 e0 WHERE [string]`:                                           PredicateResultPositive,
-		`EVENT SEQ(t0 e0) WHERE [string]`:                                      PredicateResultPositive,  // Equivalence test
-		`EVENT SEQ(t0 e0, t1 e1, t2 e2) WHERE [string]`:                        PredicateResultPositive,  // Equivalence test
-		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1]`:                                   PredicateResultNegative,  // e1 attr will be missing from e0
-		`EVENT SEQ(t0 e0, t1 e1, t1000 e1000) WHERE [string]`:                  PredicateResultUncertain, // No t1000
-		`EVENT SEQ(t0 e0, t1 e1) WHERE [string] AND e0.decimal == e1.decimal`:  PredicateResultPositive,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1] AND e0.decimal == e1.decimal`:      PredicateResultNegative,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1] OR e0.decimal == e1.decimal`:       PredicateResultPositive,
+		`EVENT t0 e0 WHERE e0.string == "astring"`:                             true,
+		`EVENT t0 e0 WHERE e0.nonexistent == 1`:                                false,
+		`EVENT t0 e0 WHERE e0.stringdecimal == 1.0`:                            false, // Wrong type
+		`EVENT t0 e0 WHERE e0.decimal == 100`:                                  true,
+		`EVENT t0 e0 WHERE e0.decimal == 100.0`:                                true,
+		`EVENT t0 e0 WHERE e0.decimal == 100.00000000`:                         true,
+		`EVENT t0 e0 WHERE e0.decimal == 0000100.00`:                           true, // Different padding
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.decimal == e1.decimal`:               true,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.array == e1.array`:                   true,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.string == e1.string`:                 true,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.stringdecimal == e1.stringdecimal`:   true,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.map == e1.map`:                       true, // Static attibutes
+		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.decimal == e1.decimal`:             true,
+		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.array == e1.array`:                 true,
+		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.string == e1.string`:               true,
+		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.stringdecimal == e1.stringdecimal`: true,
+		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.map == e1.map`:                     true,
+		`EVENT t0 e0 WHERE [string]`:                                           true,
+		`EVENT SEQ(t0 e0) WHERE [string]`:                                      true,  // Equivalence test
+		`EVENT SEQ(t0 e0, t1 e1, t2 e2) WHERE [string]`:                        true,  // Equivalence test
+		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1]`:                                   false, // e1 attr will be missing from e0
+		`EVENT SEQ(t0 e0, t1 e1, t1000 e1000) WHERE [string]`:                  false, // No t1000
+		`EVENT SEQ(t0 e0, t1 e1) WHERE [string] AND e0.decimal == e1.decimal`:  true,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1] AND e0.decimal == e1.decimal`:      false,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1] OR e0.decimal == e1.decimal`:       true,
 
 		// Window tests
-		`EVENT SEQ(t0 e0, t10 e10) WITHIN 1m`:    PredicateResultNegative, // e0 and e10 are 10 minutes apart
-		`EVENT SEQ(t0 e0, t10 e10) WITHIN 10m`:   PredicateResultPositive,
-		`EVENT SEQ(t0 e0, t10 e10) WITHIN 1h`:    PredicateResultPositive,
-		`EVENT SEQ(t0 e0, t10 e10) WITHIN 9m59s`: PredicateResultNegative,
+		`EVENT SEQ(t0 e0, t10 e10) WITHIN 1m`:    false, // e0 and e10 are 10 minutes apart
+		`EVENT SEQ(t0 e0, t10 e10) WITHIN 10m`:   true,
+		`EVENT SEQ(t0 e0, t10 e10) WITHIN 1h`:    true,
+		`EVENT SEQ(t0 e0, t10 e10) WITHIN 9m59s`: false,
 	}
 
 	for queryText, expectedResult := range queries {
+		t.Log(queryText)
 		q, err := Parse(queryText)
 		assert.NoError(t, err, fmt.Sprintf("Unexpected error parsing query \"%s\"", queryText))
 
-		capturedEvents := make(map[string]domain.Event)
-		for _, e := range events {
-			if alias := q.ShouldCapture(e); alias != "" {
-				capturedEvents[alias] = e
+		stacks := genStacks(events, q)
+		t.Logf("Generated %d stacks for \"%s\"", len(stacks), queryText)
+		found := false
+		for _, stack := range stacks {
+			if q.Evaluate(stack) == PredicateResultPositive {
+				assert.False(t, found, "More than 1 match found")
+				t.Logf("Found positive match with stack %+v", stack)
+				found = true
 			}
 		}
-		assert.NotEmpty(t, capturedEvents, "No events captured for \"%s\"", queryText)
 
-		result := q.Evaluate(capturedEvents)
-		assert.Equal(t, expectedResult.String(), result.String(), fmt.Sprintf("Incorrect result for \"%s\"", queryText))
+		assert.Equal(t, expectedResult, found, "Incorrect match for \"%s\"", queryText)
 	}
+}
+
+func TestE2EDuplicateTypes(t *testing.T) {
+	events := []domain.Event{
+		&tEventImpl{
+			typ: "t0",
+			ts:  time.Date(2014, 1, 1, 0, 0, 20, 0, time.UTC),
+			attrs: map[string]interface{}{
+				"attr": "val",
+			}},
+		&tEventImpl{
+			typ: "t0",
+			ts:  time.Date(2014, 1, 1, 0, 0, 10, 0, time.UTC),
+			attrs: map[string]interface{}{
+				"attr": "val",
+			}}}
+
+	queryText := `EVENT SEQ(t0 e0, t0 e1) WHERE [attr]`
+	q, err := Parse(queryText)
+	assert.NoError(t, err, fmt.Sprintf("Unexpected error parsing query \"%s\"", queryText))
+
+	found := false
+	stacks := genStacks(events, q)
+	for _, stack := range stacks {
+		t.Logf("Stack: %v", stack)
+		if q.Evaluate(stack) == PredicateResultPositive {
+			assert.False(t, found, "More than 1 match found")
+			t.Logf("Found positive match with stack %+v", stack)
+			found = true
+		}
+	}
+
+	assert.True(t, found, fmt.Sprintf("No positive match found for \"%s\"", queryText))
 }
