@@ -7,7 +7,7 @@ import (
 //go:generate stringer -type=tt
 
 // tt = token type
-type tt uint16
+type tt uint8
 
 const (
 	ttGeneric tt = iota

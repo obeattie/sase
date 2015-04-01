@@ -67,12 +67,12 @@ type Predicate interface {
 type op uint8
 
 const (
-	opEq op = iota
-	opNe
-	opGt
-	opLt
-	opGe
-	opLe
+	opEq op = iota // equal to (==)
+	opNe           // not equal to (!=)
+	opGt           // greater than (>)
+	opLt           // less than (<)
+	opGe           // greater than or equal to (>=)
+	opLe           // less than or equal to (<=)
 )
 
 // An operatorPredicate evaluates an operator between two values
@@ -84,7 +84,6 @@ type operatorPredicate struct {
 
 func (p *operatorPredicate) Evaluate(evs domain.CapturedEvents) PredicateResult {
 	leftVal, rightVal, err := leftRightVals(evs, p.left, p.right)
-
 	if err == ErrEventNotFound {
 		return PredicateResultUncertain
 	} else if err != nil {

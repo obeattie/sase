@@ -45,7 +45,7 @@ func (q *Query) Window() time.Duration {
 	return q.window
 }
 
-// CaptureAliases the aliases under which the event should be captured.
+// CaptureAliases the aliases under which the event should be captured (in order)
 func (q *Query) CaptureAliases(e domain.Event) []string {
 	return q.capture.Matches(e)
 }
