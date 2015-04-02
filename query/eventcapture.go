@@ -19,7 +19,7 @@ type EventCapture interface {
 	// aliases returns just the event aliases used (including duplicates)
 	aliases() []string
 	// evaluate allows the capture to participate in the matching phase, primarily so it may veto a match
-	evaluate(domain.CapturedEvents) PredicateResult
+	evaluate(domain.CapturedEvents) Result
 }
 
 // A basicEventCapture represents a capture of a single event, determined by its type
@@ -54,13 +54,13 @@ func (c *basicEventCapture) aliases() []string {
 	return []string{c.name}
 }
 
-func (c *basicEventCapture) evaluate(evs domain.CapturedEvents) PredicateResult {
+func (c *basicEventCapture) evaluate(evs domain.CapturedEvents) Result {
 	if e, ok := evs[c.name]; !ok { // Not yet matched
-		return PredicateResultUncertain
+		return Uncertain
 	} else if e.Type() != c.eventType { // Incorrect type
-		return PredicateResultNegative
+		return Negative
 	} else { // Correct type
-		return PredicateResultPositive
+		return Positive
 	}
 }
 
@@ -116,8 +116,8 @@ func (c seqEventCapture) aliases() []string {
 	return result
 }
 
-func (c seqEventCapture) evaluate(evs domain.CapturedEvents) PredicateResult {
-	result := PredicateResultUncertain
+func (c seqEventCapture) evaluate(evs domain.CapturedEvents) Result {
+	result := Uncertain
 	for i, subCap := range c {
 		if sr := subCap.evaluate(evs); i == 0 {
 			result = sr
@@ -126,13 +126,13 @@ func (c seqEventCapture) evaluate(evs domain.CapturedEvents) PredicateResult {
 		}
 	}
 
-	if result != PredicateResultNegative { // Ensure the captures are actually in sequence
+	if result != Negative { // Ensure the captures are actually in sequence
 		var lastTs time.Time
 		for _, alias := range c.aliases() {
 			if ev, ok := evs[alias]; ok {
 				when := ev.When()
 				if when.Before(lastTs) {
-					return PredicateResultNegative
+					return Negative
 				}
 				lastTs = when
 			}
@@ -194,8 +194,8 @@ func (c anyEventCapture) aliases() []string {
 	return result
 }
 
-func (c anyEventCapture) evaluate(evs domain.CapturedEvents) PredicateResult {
-	result := PredicateResultUncertain
+func (c anyEventCapture) evaluate(evs domain.CapturedEvents) Result {
+	result := Uncertain
 	for i, subCap := range c {
 		if sr := subCap.evaluate(evs); i == 0 {
 			result = sr
@@ -231,9 +231,9 @@ candidateLoop:
 	return result
 }
 
-func (c *negatedEventCapture) evaluate(evs domain.CapturedEvents) PredicateResult {
-	if result := c.EventCapture.evaluate(evs); result == PredicateResultPositive {
-		return PredicateResultNegative
+func (c *negatedEventCapture) evaluate(evs domain.CapturedEvents) Result {
+	if result := c.EventCapture.evaluate(evs); result == Positive {
+		return Negative
 	} else {
 		return result
 	}

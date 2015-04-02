@@ -22,44 +22,44 @@ func leftRightVals(evs domain.CapturedEvents, left, right value) (interface{}, i
 	}
 }
 
-type PredicateResult uint8
+type Result uint8
 
-func (r PredicateResult) And(r2 PredicateResult) PredicateResult {
+func (r Result) And(r2 Result) Result {
 	if r == r2 {
 		return r
-	} else if r == PredicateResultNegative || r2 == PredicateResultNegative {
-		return PredicateResultNegative
+	} else if r == Negative || r2 == Negative {
+		return Negative
 	} else {
-		return PredicateResultUncertain
+		return Uncertain
 	}
 }
 
-func (r PredicateResult) Or(r2 PredicateResult) PredicateResult {
-	if r == PredicateResultPositive || r2 == PredicateResultPositive {
-		return PredicateResultPositive
-	} else if r == PredicateResultUncertain || r2 == PredicateResultUncertain {
-		return PredicateResultUncertain
+func (r Result) Or(r2 Result) Result {
+	if r == Positive || r2 == Positive {
+		return Positive
+	} else if r == Uncertain || r2 == Uncertain {
+		return Uncertain
 	} else {
-		return PredicateResultNegative
+		return Negative
 	}
 }
 
-//go:generate stringer -type=PredicateResult
+//go:generate stringer -type=Result
 
 const (
-	// PredicateResultPositive indicates a positive event match
-	PredicateResultPositive PredicateResult = iota
-	// PredicateResultNegative indicates a negative event match
-	PredicateResultNegative
-	// PredicateResultUncertain indicates that it cannot, with the event(s) provided, be deterimined definitively if
+	// Positive indicates a positive event match
+	Positive Result = iota
+	// Negative indicates a negative event match
+	Negative
+	// Uncertain indicates that it cannot, with the event(s) provided, be deterimined definitively if
 	// there is a match or not
-	PredicateResultUncertain
+	Uncertain
 )
 
 type Predicate interface {
 	Representable
 	// Evaluates the predicate against the set of captured events, returning its match status.
-	Evaluate(domain.CapturedEvents) PredicateResult
+	Evaluate(domain.CapturedEvents) Result
 	// usedAliases returns the events aliases which are consulted during evaluation
 	usedAliases() []string
 }
@@ -82,80 +82,80 @@ type operatorPredicate struct {
 	op    op
 }
 
-func (p *operatorPredicate) Evaluate(evs domain.CapturedEvents) PredicateResult {
+func (p *operatorPredicate) Evaluate(evs domain.CapturedEvents) Result {
 	leftVal, rightVal, err := leftRightVals(evs, p.left, p.right)
 	if err == ErrEventNotFound {
-		return PredicateResultUncertain
+		return Uncertain
 	} else if err != nil {
 		log.Errorf("[sase:operatorPredicate] Could not evaluate %s left/right: %s", p.QueryText(), err.Error())
-		return PredicateResultNegative // Terminate this match
+		return Negative // Terminate this match
 	}
 
 	switch p.op {
 	case opEq:
 		if reflect.DeepEqual(leftVal, rightVal) {
-			return PredicateResultPositive
+			return Positive
 		}
-		return PredicateResultNegative
+		return Negative
 
 	case opNe:
 		if !reflect.DeepEqual(leftVal, rightVal) {
-			return PredicateResultPositive
+			return Positive
 		}
-		return PredicateResultNegative
+		return Negative
 
 	// >, <, >=, <= only work for float64's (currently)
 	case opGt:
 		if leftVal, ok := leftVal.(float64); ok {
 			if rightVal, ok := rightVal.(float64); ok {
 				if leftVal > rightVal {
-					return PredicateResultPositive
+					return Positive
 				}
-				return PredicateResultNegative
+				return Negative
 			}
 		}
 		log.Errorf("[sase:operatorPredicate] Could not compare gt for non-float64s: %s", p.QueryText())
-		return PredicateResultNegative // Terminate this match
+		return Negative // Terminate this match
 
 	case opLt:
 		if leftVal, ok := leftVal.(float64); ok {
 			if rightVal, ok := rightVal.(float64); ok {
 				if leftVal < rightVal {
-					return PredicateResultPositive
+					return Positive
 				}
-				return PredicateResultNegative
+				return Negative
 			}
 		}
 		log.Errorf("[sase:operatorPredicate] Could not compare lt for non-float64s: %s", p.QueryText())
-		return PredicateResultNegative // Terminate this match
+		return Negative // Terminate this match
 
 	case opGe:
 		if leftVal, ok := leftVal.(float64); ok {
 			if rightVal, ok := rightVal.(float64); ok {
 				if leftVal >= rightVal {
-					return PredicateResultPositive
+					return Positive
 				}
-				return PredicateResultNegative
+				return Negative
 			}
 		}
 		log.Errorf("[sase:operatorPredicate] Could not compare ge for non-float64s: %s", p.QueryText())
-		return PredicateResultNegative // Terminate this match
+		return Negative // Terminate this match
 
 	case opLe:
 		if leftVal, ok := leftVal.(float64); ok {
 			if rightVal, ok := rightVal.(float64); ok {
 				if leftVal <= rightVal {
-					return PredicateResultPositive
+					return Positive
 				}
-				return PredicateResultNegative
+				return Negative
 			}
 		}
 		log.Errorf("[sase:operatorPredicate] Could not compare le for non-float64s: %s", p.QueryText())
-		return PredicateResultNegative // Terminate this match
+		return Negative // Terminate this match
 
 	default:
 		log.Errorf("[sase:operatorPredicate] Unhandled op %v for %s", p.op, p.QueryText())
-		return PredicateResultNegative
+		return Negative
 	}
 }
 
@@ -199,7 +199,7 @@ func (p *operatorPredicate) usedAliases() []string {
 
 type equivalenceTestPredicate string // Holds the equivalence key path
 
-func (p equivalenceTestPredicate) Evaluate(evs domain.CapturedEvents) PredicateResult {
+func (p equivalenceTestPredicate) Evaluate(evs domain.CapturedEvents) Result {
 	var (
 		lastVal interface{}
 		i       = 0
@@ -207,20 +207,20 @@ func (p equivalenceTestPredicate) Evaluate(evs domain.CapturedEvents) PredicateR
 	for alias, _ := range evs {
 		if val, err := attributeLookup(fmt.Sprintf("%s.%s", alias, p)).Value(evs); err != nil {
 			if err == ErrEventNotFound {
-				return PredicateResultUncertain
+				return Uncertain
 			} else if err != nil {
 				log.Errorf("[sase:equivalenceTestPredicate] Could not evaluate %s left/right: %s", p.QueryText(), err.Error())
-				return PredicateResultNegative // Terminate this match
+				return Negative // Terminate this match
 			}
 		} else {
 			if i > 0 && !reflect.DeepEqual(lastVal, val) {
-				return PredicateResultNegative
+				return Negative
 			}
 			lastVal = val
 			i++
 		}
 	}
-	return PredicateResultPositive
+	return Positive
 }
 
 func (p equivalenceTestPredicate) QueryText() string {

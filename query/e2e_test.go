@@ -154,7 +154,7 @@ func TestE2E(t *testing.T) {
 		t.Logf("Generated %d stacks for \"%s\"", len(stacks), queryText)
 		found := false
 		for _, stack := range stacks {
-			if q.Evaluate(stack) == PredicateResultPositive {
+			if q.Evaluate(stack) == Positive {
 				require.False(t, found, "More than 1 match found")
 				t.Logf("Found positive match with stack %+v", stack)
 				found = true
@@ -188,7 +188,7 @@ func TestE2EDuplicateTypes(t *testing.T) {
 	stacks := genStacks(events, q)
 	for _, stack := range stacks {
 		t.Logf("Stack: %v", stack)
-		if q.Evaluate(stack) == PredicateResultPositive {
+		if q.Evaluate(stack) == Positive {
 			require.False(t, found, "More than 1 match found")
 			t.Logf("Found positive match with stack %+v", stack)
 			found = true

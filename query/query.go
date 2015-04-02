@@ -55,7 +55,7 @@ func (q *Query) Captures() map[string]string {
 	return q.capture.Names()
 }
 
-func (q *Query) Evaluate(evs domain.CapturedEvents) PredicateResult {
+func (q *Query) Evaluate(evs domain.CapturedEvents) Result {
 	result := q.capture.evaluate(evs)
 	if q.predicate != nil {
 		result = result.And(q.predicate.Evaluate(evs))
@@ -63,7 +63,7 @@ func (q *Query) Evaluate(evs domain.CapturedEvents) PredicateResult {
 	return result.And(q.windowResult(evs))
 }
 
-func (q *Query) windowResult(evs domain.CapturedEvents) PredicateResult {
+func (q *Query) windowResult(evs domain.CapturedEvents) Result {
 	if q.window > 0 {
 		var earliest, latest time.Time
 		for _, ev := range evs {
@@ -76,10 +76,10 @@ func (q *Query) windowResult(evs domain.CapturedEvents) PredicateResult {
 			}
 		}
 		if latest.Sub(earliest) > q.window {
-			return PredicateResultNegative
+			return Negative
 		}
 	}
-	return PredicateResultPositive
+	return Positive
 }
 
 func (q *Query) validate() error {

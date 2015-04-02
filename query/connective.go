@@ -9,16 +9,16 @@ import (
 // A conjunction represents an array of AND'ed predicates
 type conjunction []Predicate
 
-func (c conjunction) Evaluate(evs domain.CapturedEvents) PredicateResult {
+func (c conjunction) Evaluate(evs domain.CapturedEvents) Result {
 	for _, p := range c {
 		switch p.Evaluate(evs) {
-		case PredicateResultUncertain:
-			return PredicateResultUncertain
-		case PredicateResultNegative:
-			return PredicateResultNegative
+		case Uncertain:
+			return Uncertain
+		case Negative:
+			return Negative
 		}
 	}
-	return PredicateResultPositive
+	return Positive
 }
 
 func (c conjunction) QueryText() string {
@@ -40,16 +40,16 @@ func (c conjunction) usedAliases() []string {
 // A disunction represents an array of OR'd predicates
 type disjunction []Predicate
 
-func (d disjunction) Evaluate(evs domain.CapturedEvents) PredicateResult {
+func (d disjunction) Evaluate(evs domain.CapturedEvents) Result {
 	for _, p := range d {
 		switch p.Evaluate(evs) {
-		case PredicateResultUncertain:
-			return PredicateResultUncertain
-		case PredicateResultPositive:
-			return PredicateResultPositive
+		case Uncertain:
+			return Uncertain
+		case Positive:
+			return Positive
 		}
 	}
-	return PredicateResultNegative
+	return Negative
 }
 
 func (d disjunction) QueryText() string {

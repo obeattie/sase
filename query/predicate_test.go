@@ -10,17 +10,17 @@ import (
 	"github.com/obeattie/sase/domain"
 )
 
-func TestPredicateResultAnd(t *testing.T) {
-	expectations := map[[2]PredicateResult]PredicateResult{
-		[2]PredicateResult{PredicateResultNegative, PredicateResultNegative}:   PredicateResultNegative,
-		[2]PredicateResult{PredicateResultNegative, PredicateResultPositive}:   PredicateResultNegative,
-		[2]PredicateResult{PredicateResultNegative, PredicateResultUncertain}:  PredicateResultNegative,
-		[2]PredicateResult{PredicateResultPositive, PredicateResultNegative}:   PredicateResultNegative,
-		[2]PredicateResult{PredicateResultPositive, PredicateResultPositive}:   PredicateResultPositive,
-		[2]PredicateResult{PredicateResultPositive, PredicateResultUncertain}:  PredicateResultUncertain,
-		[2]PredicateResult{PredicateResultUncertain, PredicateResultNegative}:  PredicateResultNegative,
-		[2]PredicateResult{PredicateResultUncertain, PredicateResultPositive}:  PredicateResultUncertain,
-		[2]PredicateResult{PredicateResultUncertain, PredicateResultUncertain}: PredicateResultUncertain,
+func TestAnd(t *testing.T) {
+	expectations := map[[2]Result]Result{
+		[2]Result{Negative, Negative}:   Negative,
+		[2]Result{Negative, Positive}:   Negative,
+		[2]Result{Negative, Uncertain}:  Negative,
+		[2]Result{Positive, Negative}:   Negative,
+		[2]Result{Positive, Positive}:   Positive,
+		[2]Result{Positive, Uncertain}:  Uncertain,
+		[2]Result{Uncertain, Negative}:  Negative,
+		[2]Result{Uncertain, Positive}:  Uncertain,
+		[2]Result{Uncertain, Uncertain}: Uncertain,
 	}
 
 	for inputs, expected := range expectations {
@@ -30,17 +30,17 @@ func TestPredicateResultAnd(t *testing.T) {
 	}
 }
 
-func TestPredicateResultOr(t *testing.T) {
-	expectations := map[[2]PredicateResult]PredicateResult{
-		[2]PredicateResult{PredicateResultNegative, PredicateResultNegative}:   PredicateResultNegative,
-		[2]PredicateResult{PredicateResultNegative, PredicateResultPositive}:   PredicateResultPositive,
-		[2]PredicateResult{PredicateResultNegative, PredicateResultUncertain}:  PredicateResultUncertain,
-		[2]PredicateResult{PredicateResultPositive, PredicateResultNegative}:   PredicateResultPositive,
-		[2]PredicateResult{PredicateResultPositive, PredicateResultPositive}:   PredicateResultPositive,
-		[2]PredicateResult{PredicateResultPositive, PredicateResultUncertain}:  PredicateResultPositive,
-		[2]PredicateResult{PredicateResultUncertain, PredicateResultNegative}:  PredicateResultUncertain,
-		[2]PredicateResult{PredicateResultUncertain, PredicateResultPositive}:  PredicateResultPositive,
-		[2]PredicateResult{PredicateResultUncertain, PredicateResultUncertain}: PredicateResultUncertain,
+func TestOr(t *testing.T) {
+	expectations := map[[2]Result]Result{
+		[2]Result{Negative, Negative}:   Negative,
+		[2]Result{Negative, Positive}:   Positive,
+		[2]Result{Negative, Uncertain}:  Uncertain,
+		[2]Result{Positive, Negative}:   Positive,
+		[2]Result{Positive, Positive}:   Positive,
+		[2]Result{Positive, Uncertain}:  Positive,
+		[2]Result{Uncertain, Negative}:  Uncertain,
+		[2]Result{Uncertain, Positive}:  Positive,
+		[2]Result{Uncertain, Uncertain}: Uncertain,
 	}
 
 	for inputs, expected := range expectations {
@@ -84,54 +84,54 @@ func TestOperatorPredicate(t *testing.T) {
 		"e3": e3,
 	}
 
-	cases := map[op]map[[2]string]PredicateResult{
+	cases := map[op]map[[2]string]Result{
 		opEq: {
-			[2]string{"e1.foo", "e2.foo"}:       PredicateResultPositive,
-			[2]string{"e1.foo", "e3.foo"}:       PredicateResultNegative,
-			[2]string{"e2.bar", "e3.bar"}:       PredicateResultPositive,
-			[2]string{"e1.bar", "e3.bar"}:       PredicateResultNegative,
-			[2]string{"e1.foo", "e3.bazbazbas"}: PredicateResultNegative,  // Attribute not found
-			[2]string{"e1.foo", "e5.foo"}:       PredicateResultUncertain, // Event not found
+			[2]string{"e1.foo", "e2.foo"}:       Positive,
+			[2]string{"e1.foo", "e3.foo"}:       Negative,
+			[2]string{"e2.bar", "e3.bar"}:       Positive,
+			[2]string{"e1.bar", "e3.bar"}:       Negative,
+			[2]string{"e1.foo", "e3.bazbazbas"}: Negative,  // Attribute not found
+			[2]string{"e1.foo", "e5.foo"}:       Uncertain, // Event not found
 		},
 		opNe: { // The inverse of opEq's cases
-			[2]string{"e1.foo", "e2.foo"}:       PredicateResultNegative,
-			[2]string{"e1.foo", "e3.foo"}:       PredicateResultPositive,
-			[2]string{"e2.bar", "e3.bar"}:       PredicateResultNegative,
-			[2]string{"e1.bar", "e3.bar"}:       PredicateResultPositive,
-			[2]string{"e1.foo", "e3.bazbazbas"}: PredicateResultNegative, // Attribute not found always return false
-			[2]string{"e1.foo", "e5.foo"}:       PredicateResultUncertain,
+			[2]string{"e1.foo", "e2.foo"}:       Negative,
+			[2]string{"e1.foo", "e3.foo"}:       Positive,
+			[2]string{"e2.bar", "e3.bar"}:       Negative,
+			[2]string{"e1.bar", "e3.bar"}:       Positive,
+			[2]string{"e1.foo", "e3.bazbazbas"}: Negative, // Attribute not found always return false
+			[2]string{"e1.foo", "e5.foo"}:       Uncertain,
 		},
 		opLt: {
-			[2]string{"e1.num", "e3.num"}:       PredicateResultPositive,
-			[2]string{"e3.num", "e1.num"}:       PredicateResultNegative,
-			[2]string{"e1.num", "e2.num"}:       PredicateResultNegative,
-			[2]string{"e3.numfoo", "e1.numfoo"}: PredicateResultNegative, // Attribute not found always returns false
-			[2]string{"e1.foo", "e3.num"}:       PredicateResultNegative, // Wrong attribute type always returns false
-			[2]string{"e3.foo", "e1.num"}:       PredicateResultNegative,
+			[2]string{"e1.num", "e3.num"}:       Positive,
+			[2]string{"e3.num", "e1.num"}:       Negative,
+			[2]string{"e1.num", "e2.num"}:       Negative,
+			[2]string{"e3.numfoo", "e1.numfoo"}: Negative, // Attribute not found always returns false
+			[2]string{"e1.foo", "e3.num"}:       Negative, // Wrong attribute type always returns false
+			[2]string{"e3.foo", "e1.num"}:       Negative,
 		},
 		opGt: {
-			[2]string{"e1.num", "e3.num"}:       PredicateResultNegative,
-			[2]string{"e3.num", "e1.num"}:       PredicateResultPositive,
-			[2]string{"e1.num", "e2.num"}:       PredicateResultNegative,
-			[2]string{"e3.numfoo", "e1.numfoo"}: PredicateResultNegative, // Attribute not found always returns false
-			[2]string{"e1.foo", "e3.num"}:       PredicateResultNegative, // Wrong attribute type always returns false
-			[2]string{"e3.foo", "e1.num"}:       PredicateResultNegative,
+			[2]string{"e1.num", "e3.num"}:       Negative,
+			[2]string{"e3.num", "e1.num"}:       Positive,
+			[2]string{"e1.num", "e2.num"}:       Negative,
+			[2]string{"e3.numfoo", "e1.numfoo"}: Negative, // Attribute not found always returns false
+			[2]string{"e1.foo", "e3.num"}:       Negative, // Wrong attribute type always returns false
+			[2]string{"e3.foo", "e1.num"}:       Negative,
 		},
 		opLe: {
-			[2]string{"e1.num", "e3.num"}:       PredicateResultPositive,
-			[2]string{"e3.num", "e1.num"}:       PredicateResultNegative,
-			[2]string{"e1.num", "e2.num"}:       PredicateResultPositive,
-			[2]string{"e3.numfoo", "e1.numfoo"}: PredicateResultNegative, // Attribute not found always returns false
-			[2]string{"e1.foo", "e3.num"}:       PredicateResultNegative, // Wrong attribute type always returns false
-			[2]string{"e3.foo", "e1.num"}:       PredicateResultNegative,
+			[2]string{"e1.num", "e3.num"}:       Positive,
+			[2]string{"e3.num", "e1.num"}:       Negative,
+			[2]string{"e1.num", "e2.num"}:       Positive,
+			[2]string{"e3.numfoo", "e1.numfoo"}: Negative, // Attribute not found always returns false
+			[2]string{"e1.foo", "e3.num"}:       Negative, // Wrong attribute type always returns false
+			[2]string{"e3.foo", "e1.num"}:       Negative,
 		},
 		opGe: {
-			[2]string{"e1.num", "e3.num"}:       PredicateResultNegative,
-			[2]string{"e3.num", "e1.num"}:       PredicateResultPositive,
-			[2]string{"e1.num", "e2.num"}:       PredicateResultPositive,
-			[2]string{"e3.numfoo", "e1.numfoo"}: PredicateResultNegative, // Attribute not found always returns false
-			[2]string{"e1.foo", "e3.num"}:       PredicateResultNegative, // Wrong attribute type always returns false
-			[2]string{"e3.foo", "e1.num"}:       PredicateResultNegative,
+			[2]string{"e1.num", "e3.num"}:       Negative,
+			[2]string{"e3.num", "e1.num"}:       Positive,
+			[2]string{"e1.num", "e2.num"}:       Positive,
+			[2]string{"e3.numfoo", "e1.numfoo"}: Negative, // Attribute not found always returns false
+			[2]string{"e1.foo", "e3.num"}:       Negative, // Wrong attribute type always returns false
+			[2]string{"e3.foo", "e1.num"}:       Negative,
 		},
 	}
 
