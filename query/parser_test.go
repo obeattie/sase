@@ -6,7 +6,7 @@ import (
 	"time"
 
 	log "github.com/cihub/seelog"
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func TestParsing(t *testing.T) {
@@ -68,23 +68,23 @@ func TestParsing(t *testing.T) {
 	}
 
 	te := func(queryText string, expectSuccess bool) {
-		assert.NotPanics(t, func() {
+		require.NotPanics(t, func() {
 			q, err := Parse(queryText)
 			if expectSuccess {
-				assert.NoError(t, err, fmt.Sprintf("Unexpected error parsing \"%s\"", queryText))
-				assert.NotNil(t, q, "Query unexpectedly nil for \"%s\"", queryText)
+				require.NoError(t, err, fmt.Sprintf("Unexpected error parsing \"%s\"", queryText))
+				require.NotNil(t, q, "Query unexpectedly nil for \"%s\"", queryText)
 
 				// If we output the query again, and re-parse it, outputs should be the same
 				// We can't compare strings directly because we deliberately standardise output
 				output := q.QueryText()
 				q2, err := Parse(output)
-				assert.NoError(t, err, fmt.Sprintf("Unexpected error parsing generated output \"%s\" (original: \"%s\")",
+				require.NoError(t, err, fmt.Sprintf("Unexpected error parsing generated output \"%s\" (original: \"%s\")",
 					output, queryText))
-				assert.Equal(t, output, q2.QueryText(), fmt.Sprintf("Generated outputs do not match for input \"%s\"",
+				require.Equal(t, output, q2.QueryText(), fmt.Sprintf("Generated outputs do not match for input \"%s\"",
 					queryText))
 			} else {
-				assert.Error(t, err, fmt.Sprintf("Error expected parsing \"%s\"", queryText))
-				assert.Nil(t, q, "Query unexpectedly not-nil for \"%s\"", queryText)
+				require.Error(t, err, fmt.Sprintf("Error expected parsing \"%s\"", queryText))
+				require.Nil(t, q, "Query unexpectedly not-nil for \"%s\"", queryText)
 			}
 		}, fmt.Sprintf("Unexpected panic parsing \"%s\"", queryText))
 	}
@@ -118,8 +118,8 @@ func TestParsingCaptureNames(t *testing.T) {
 
 	for queryText, expectedCaptures := range expectations {
 		q, err := Parse(queryText)
-		assert.NoError(t, err, fmt.Sprintf("Error parsing %s", queryText))
-		assert.Equal(t, expectedCaptures, q.Captures(), "Unexpected capture result")
+		require.NoError(t, err, fmt.Sprintf("Error parsing %s", queryText))
+		require.Equal(t, expectedCaptures, q.Captures(), "Unexpected capture result")
 	}
 }
 
@@ -134,8 +134,8 @@ func TestParsingWindow(t *testing.T) {
 	for queryText, expectedDuration := range expectations {
 		t.Logf("Trying %s (%s)", queryText, expectedDuration.String())
 		q, err := Parse("EVENT t0 e0 WITHIN " + queryText)
-		assert.NoError(t, err)
-		assert.Equal(t, expectedDuration, q.Window())
+		require.NoError(t, err)
+		require.Equal(t, expectedDuration, q.Window())
 	}
 }
 

@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/obeattie/sase/domain"
 )
@@ -25,7 +25,7 @@ func TestPredicateResultAnd(t *testing.T) {
 
 	for inputs, expected := range expectations {
 		actual := inputs[0].And(inputs[1])
-		assert.Equal(t, expected.String(), actual.String(), fmt.Sprintf("%s AND %s", inputs[0].String(),
+		require.Equal(t, expected.String(), actual.String(), fmt.Sprintf("%s AND %s", inputs[0].String(),
 			inputs[1].String()))
 	}
 }
@@ -45,7 +45,7 @@ func TestPredicateResultOr(t *testing.T) {
 
 	for inputs, expected := range expectations {
 		actual := inputs[0].Or(inputs[1])
-		assert.Equal(t, expected.String(), actual.String(), fmt.Sprintf("%s OR %s", inputs[0].String(),
+		require.Equal(t, expected.String(), actual.String(), fmt.Sprintf("%s OR %s", inputs[0].String(),
 			inputs[1].String()))
 	}
 }
@@ -143,7 +143,7 @@ func TestOperatorPredicate(t *testing.T) {
 				op:    op,
 			}
 
-			assert.Equal(t, expectedResult, (impl.Evaluate(evs)), fmt.Sprintf("Incorrect result for \"%s\"",
+			require.Equal(t, expectedResult, (impl.Evaluate(evs)), fmt.Sprintf("Incorrect result for \"%s\"",
 				impl.QueryText()))
 		}
 	}

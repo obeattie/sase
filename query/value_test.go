@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/obeattie/sase/domain"
 )
@@ -54,10 +54,10 @@ func TestAttributeLookup(t *testing.T) {
 		})
 
 		if expectedResult == nil {
-			assert.Nil(t, result, fmt.Sprintf("Unexpected result evaluating keyPath %s", keyPath))
+			require.Nil(t, result, fmt.Sprintf("Unexpected result evaluating keyPath %s", keyPath))
 		} else {
-			assert.NoError(t, err, fmt.Sprintf("Unexpected error evaluating keyPath %s", keyPath))
-			assert.Equal(t, expectedResult, result, fmt.Sprintf("Unexpected result evaluating keyPath %s", keyPath))
+			require.NoError(t, err, fmt.Sprintf("Unexpected error evaluating keyPath %s", keyPath))
+			require.Equal(t, expectedResult, result, fmt.Sprintf("Unexpected result evaluating keyPath %s", keyPath))
 		}
 	}
 }

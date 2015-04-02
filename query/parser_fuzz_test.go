@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
 func fuzzy(length int) []byte {
@@ -37,7 +37,7 @@ func TestParsingComponentFuzz(t *testing.T) {
 				buf.WriteString(part)
 			}
 
-			assert.NotPanics(t, func() {
+			require.NotPanics(t, func() {
 				Parse(buf.String())
 			})
 		}

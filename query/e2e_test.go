@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/obeattie/sase/domain"
 )
@@ -148,20 +148,20 @@ func TestE2E(t *testing.T) {
 	for queryText, expectedResult := range queries {
 		t.Log(queryText)
 		q, err := Parse(queryText)
-		assert.NoError(t, err, fmt.Sprintf("Unexpected error parsing query \"%s\"", queryText))
+		require.NoError(t, err, fmt.Sprintf("Unexpected error parsing query \"%s\"", queryText))
 
 		stacks := genStacks(events, q)
 		t.Logf("Generated %d stacks for \"%s\"", len(stacks), queryText)
 		found := false
 		for _, stack := range stacks {
 			if q.Evaluate(stack) == PredicateResultPositive {
-				assert.False(t, found, "More than 1 match found")
+				require.False(t, found, "More than 1 match found")
 				t.Logf("Found positive match with stack %+v", stack)
 				found = true
 			}
 		}
 
-		assert.Equal(t, expectedResult, found, "Incorrect match for \"%s\"", queryText)
+		require.Equal(t, expectedResult, found, "Incorrect match for \"%s\"", queryText)
 	}
 }
 
@@ -182,18 +182,18 @@ func TestE2EDuplicateTypes(t *testing.T) {
 
 	queryText := `EVENT SEQ(t0 e0, t0 e1) WHERE [attr]`
 	q, err := Parse(queryText)
-	assert.NoError(t, err, fmt.Sprintf("Unexpected error parsing query \"%s\"", queryText))
+	require.NoError(t, err, fmt.Sprintf("Unexpected error parsing query \"%s\"", queryText))
 
 	found := false
 	stacks := genStacks(events, q)
 	for _, stack := range stacks {
 		t.Logf("Stack: %v", stack)
 		if q.Evaluate(stack) == PredicateResultPositive {
-			assert.False(t, found, "More than 1 match found")
+			require.False(t, found, "More than 1 match found")
 			t.Logf("Found positive match with stack %+v", stack)
 			found = true
 		}
 	}
 
-	assert.True(t, found, fmt.Sprintf("No positive match found for \"%s\"", queryText))
+	require.True(t, found, fmt.Sprintf("No positive match found for \"%s\"", queryText))
 }
