@@ -162,7 +162,7 @@ func TestE2E(t *testing.T) {
 		found := false
 		for _, stack := range stacks {
 			r := q.Evaluate(stack)
-			t.Logf("    [%s]: %s", describeStack(stack), r.String())
+			t.Logf("    [%s]: %s", domain.DescribeCapturedEvents(stack), r.String())
 			switch r {
 			case Positive:
 				require.False(t, found, "More than 1 match found")
@@ -197,7 +197,7 @@ func TestE2EDuplicateTypes(t *testing.T) {
 	stacks := genStacks(events, q)
 	for _, stack := range stacks {
 		r := q.Evaluate(stack)
-		t.Logf("[%s]: %s", describeStack(stack), r.String())
+		t.Logf("[%s]: %s", domain.DescribeCapturedEvents(stack), r.String())
 		if r == Positive {
 			require.False(t, found, "More than 1 match found")
 			found = true

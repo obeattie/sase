@@ -1,6 +1,8 @@
 package domain
 
 import (
+	"fmt"
+	"strings"
 	"time"
 )
 
@@ -16,3 +18,14 @@ type Event interface {
 // CapturedEvents represents an event sequence that has been captured from an input stream (or streams) by a query,
 // mapping aliases to actual events
 type CapturedEvents map[string]Event
+
+func DescribeCapturedEvents(evs CapturedEvents) string {
+	results := make([]string, 0, len(evs))
+
+	for alias, event := range evs {
+		desc := fmt.Sprintf("%s:%s", alias, event.Type())
+		results = append(results, desc)
+	}
+
+	return strings.Join(results, " ")
+}

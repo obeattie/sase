@@ -1,11 +1,7 @@
 package query
 
 import (
-	"fmt"
-	"strings"
 	"time"
-
-	"github.com/obeattie/sase/domain"
 )
 
 type tEventImpl struct {
@@ -24,15 +20,4 @@ func (e *tEventImpl) Attributes() map[string]interface{} {
 
 func (e *tEventImpl) When() time.Time {
 	return e.ts
-}
-
-func describeStack(evs domain.CapturedEvents) string {
-	results := make([]string, 0, len(evs))
-
-	for alias, event := range evs {
-		desc := fmt.Sprintf("%s:%s", alias, event.Type())
-		results = append(results, desc)
-	}
-
-	return strings.Join(results, " ")
 }
