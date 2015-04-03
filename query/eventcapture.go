@@ -232,9 +232,13 @@ candidateLoop:
 }
 
 func (c *negatedEventCapture) evaluate(evs domain.CapturedEvents) Result {
-	if result := c.EventCapture.evaluate(evs); result == Positive {
-		return Negative
-	} else {
-		return result
+	r := c.EventCapture.evaluate(evs)
+	switch r {
+	case Positive:
+		return Invalid
+	case Uncertain:
+		return Positive
+	default:
+		return r
 	}
 }

@@ -27,6 +27,8 @@ type Result uint8
 func (r Result) And(r2 Result) Result {
 	if r == r2 {
 		return r
+	} else if r == Invalid || r2 == Invalid {
+		return Invalid
 	} else if r == Negative || r2 == Negative {
 		return Negative
 	} else {
@@ -39,8 +41,10 @@ func (r Result) Or(r2 Result) Result {
 		return Positive
 	} else if r == Uncertain || r2 == Uncertain {
 		return Uncertain
-	} else {
+	} else if r == Negative || r2 == Negative {
 		return Negative
+	} else {
+		return Invalid
 	}
 }
 
@@ -54,6 +58,9 @@ const (
 	// Uncertain indicates that it cannot, with the event(s) provided, be deterimined definitively if
 	// there is a match or not
 	Uncertain
+	// Invalid indicates a negative event match, such that the stack used to compute this result should itself
+	// be invalidated. That is, any partial matches may NEVER reach an accepting state.
+	Invalid
 )
 
 type Predicate interface {

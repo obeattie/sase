@@ -4,9 +4,9 @@ package query
 
 import "fmt"
 
-const _Result_name = "PositiveNegativeUncertain"
+const _Result_name = "PositiveNegativeUncertainInvalid"
 
-var _Result_index = [...]uint8{0, 8, 16, 25}
+var _Result_index = [...]uint8{0, 8, 16, 25, 32}
 
 func (i Result) String() string {
 	if i+1 >= Result(len(_Result_index)) {

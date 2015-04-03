@@ -72,9 +72,10 @@ func genStacks(evs []domain.Event, q *Query) []domain.CapturedEvents {
 	for _, e := range evs {
 		for _, alias := range q.CaptureAliases(e) {
 			// Add to any stacks that accept this event
-			newStacks := make([]domain.CapturedEvents, 0)
+			var newResult []domain.CapturedEvents
 		acceptingLoop:
 			for _, stack := range result {
+				newResult = append(newResult, stack)
 				if _, ok := stack[alias]; ok {
 					continue acceptingLoop
 				}
@@ -88,12 +89,15 @@ func genStacks(evs []domain.Event, q *Query) []domain.CapturedEvents {
 					newStack[k] = v
 				}
 				newStack[alias] = e
-				newStacks = append(newStacks, newStack)
+				if q.Evaluate(newStack) == Invalid {
+					newResult = newResult[:len(newResult)-1]
+				} else {
+					newResult = append(newResult, newStack)
+				}
 			}
-			result = append(result, newStacks...)
 
 			// Create a new (virgin) stack with this capture and no others
-			result = append(result, domain.CapturedEvents{alias: e})
+			result = append(newResult, domain.CapturedEvents{alias: e})
 		}
 	}
 	return result
@@ -102,14 +106,17 @@ func genStacks(evs []domain.Event, q *Query) []domain.CapturedEvents {
 func TestE2E(t *testing.T) {
 	events := genEvents(100)
 	queries := map[string]bool{ // true = one positive match
-		`EVENT t0 e0`:                                            true,  // No predicate should match
-		`EVENT t0 e0 WHERE e0.foobar == e0.foobaz`:               false, // Nonexistent events
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 == e1.e0`:           true,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 != e1.e0`:           false,
-		`EVENT SEQ(t0 e0, t1000 e1) WHERE e0.e0 == e1.e0`:        false, // Incomplete events
-		`EVENT SEQ(t0 e0, t1 e1, t1000 e2) WHERE e0.e0 != e1.e0`: false, // Incomplete events but known to not match
-		`EVENT SEQ(t1 e1, t0 e0)`:                                false, // SEQ out of order
-		`EVENT SEQ(t0 e0, !(t1 e1), t2 e2)`:                      false, // Negated event is in stream
+		`EVENT t0 e0`:                                               true,  // No predicate should match
+		`EVENT t0 e0 WHERE e0.foobar == e0.foobaz`:                  false, // Nonexistent events
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 == e1.e0`:              true,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 != e1.e0`:              false,
+		`EVENT SEQ(t0 e0, t1000 e1) WHERE e0.e0 == e1.e0`:           false, // Incomplete events
+		`EVENT SEQ(t0 e0, t1 e1, t1000 e2) WHERE e0.e0 != e1.e0`:    false, // Incomplete events but known to not match
+		`EVENT SEQ(t1 e1, t0 e0)`:                                   false, // SEQ out of order
+		`EVENT SEQ(t0 e0, !(t1 e1), t2 e2)`:                         false, // Negated event in stream
+		`EVENT SEQ(t0 e0, !(foo bar), t1 e1)`:                       true,  // Negated event not in stream
+		`EVENT SEQ(t0 e0, !(foo bar), !(baz boo), t2 e2)`:           true,  // Negated events not in stream
+		`EVENT SEQ(t0 e0, !(foo bar), !(t1 e1), !(baz boo), t2 e2)`: false, // One negated event in stream
 
 		// Attribute tests
 		`EVENT t0 e0 WHERE e0.string == "astring"`:                             true,
@@ -154,9 +161,11 @@ func TestE2E(t *testing.T) {
 		t.Logf("Generated %d stacks for \"%s\"", len(stacks), queryText)
 		found := false
 		for _, stack := range stacks {
-			if q.Evaluate(stack) == Positive {
+			r := q.Evaluate(stack)
+			t.Logf("    [%s]: %s", describeStack(stack), r.String())
+			switch r {
+			case Positive:
 				require.False(t, found, "More than 1 match found")
-				t.Logf("Found positive match with stack %+v", stack)
 				found = true
 			}
 		}
@@ -187,10 +196,10 @@ func TestE2EDuplicateTypes(t *testing.T) {
 	found := false
 	stacks := genStacks(events, q)
 	for _, stack := range stacks {
-		t.Logf("Stack: %v", stack)
-		if q.Evaluate(stack) == Positive {
+		r := q.Evaluate(stack)
+		t.Logf("[%s]: %s", describeStack(stack), r.String())
+		if r == Positive {
 			require.False(t, found, "More than 1 match found")
-			t.Logf("Found positive match with stack %+v", stack)
 			found = true
 		}
 	}

@@ -15,12 +15,19 @@ func TestAnd(t *testing.T) {
 		[2]Result{Negative, Negative}:   Negative,
 		[2]Result{Negative, Positive}:   Negative,
 		[2]Result{Negative, Uncertain}:  Negative,
+		[2]Result{Negative, Invalid}:    Invalid,
 		[2]Result{Positive, Negative}:   Negative,
 		[2]Result{Positive, Positive}:   Positive,
 		[2]Result{Positive, Uncertain}:  Uncertain,
+		[2]Result{Positive, Invalid}:    Invalid,
 		[2]Result{Uncertain, Negative}:  Negative,
 		[2]Result{Uncertain, Positive}:  Uncertain,
 		[2]Result{Uncertain, Uncertain}: Uncertain,
+		[2]Result{Uncertain, Invalid}:   Invalid,
+		[2]Result{Invalid, Negative}:    Invalid,
+		[2]Result{Invalid, Positive}:    Invalid,
+		[2]Result{Invalid, Uncertain}:   Invalid,
+		[2]Result{Invalid, Invalid}:     Invalid,
 	}
 
 	for inputs, expected := range expectations {
@@ -35,12 +42,19 @@ func TestOr(t *testing.T) {
 		[2]Result{Negative, Negative}:   Negative,
 		[2]Result{Negative, Positive}:   Positive,
 		[2]Result{Negative, Uncertain}:  Uncertain,
+		[2]Result{Negative, Invalid}:    Negative,
 		[2]Result{Positive, Negative}:   Positive,
 		[2]Result{Positive, Positive}:   Positive,
 		[2]Result{Positive, Uncertain}:  Positive,
+		[2]Result{Positive, Invalid}:    Positive,
 		[2]Result{Uncertain, Negative}:  Uncertain,
 		[2]Result{Uncertain, Positive}:  Positive,
 		[2]Result{Uncertain, Uncertain}: Uncertain,
+		[2]Result{Uncertain, Invalid}:   Uncertain,
+		[2]Result{Invalid, Negative}:    Negative,
+		[2]Result{Invalid, Positive}:    Positive,
+		[2]Result{Invalid, Uncertain}:   Uncertain,
+		[2]Result{Invalid, Invalid}:     Invalid,
 	}
 
 	for inputs, expected := range expectations {
