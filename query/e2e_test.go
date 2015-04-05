@@ -106,47 +106,50 @@ func genStacks(evs []domain.Event, q *Query) []domain.CapturedEvents {
 func TestE2E(t *testing.T) {
 	events := genEvents(100)
 	queries := map[string]bool{ // true = one positive match
-		`EVENT t0 e0`:                                               true,  // No predicate should match
-		`EVENT t0 e0 WHERE e0.foobar == e0.foobaz`:                  false, // Nonexistent events
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 == e1.e0`:              true,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 != e1.e0`:              false,
-		`EVENT SEQ(t0 e0, t1000 e1) WHERE e0.e0 == e1.e0`:           false, // Incomplete events
-		`EVENT SEQ(t0 e0, t1 e1, t1000 e2) WHERE e0.e0 != e1.e0`:    false, // Incomplete events but known to not match
-		`EVENT SEQ(t1 e1, t0 e0)`:                                   false, // SEQ out of order
-		`EVENT SEQ(t0 e0, !(t1 e1), t2 e2)`:                         false, // Negated event in stream
-		`EVENT SEQ(t0 e0, !(foo bar), t1 e1)`:                       true,  // Negated event not in stream
-		`EVENT SEQ(t0 e0, !(foo bar), !(baz boo), t2 e2)`:           true,  // Negated events not in stream
-		`EVENT SEQ(t0 e0, !(foo bar), !(t1 e1), !(baz boo), t2 e2)`: false, // One negated event in stream
+		`EVENT t0 e0`:                                                   true,  // No predicate should match
+		`EVENT t0 e0 WHERE e0.foobar == e0.foobaz`:                      false, // Nonexistent events
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 == e1.e0`:                  true,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 != e1.e0`:                  false,
+		`EVENT SEQ(t0 e0, t1000 e1) WHERE e0.e0 == e1.e0`:               false, // Incomplete events
+		`EVENT SEQ(t0 e0, t1 e1, t1000 e2) WHERE e0.e0 != e1.e0`:        false, // Incomplete events but known to not match
+		`EVENT SEQ(t1 e1, t0 e0)`:                                       false, // SEQ out of order
+		`EVENT SEQ(t0 e0, !(t1 e1), t2 e2)`:                             false, // Negated event in stream
+		`EVENT SEQ(t0 e0, !(foo bar), t1 e1)`:                           true,  // Negated event not in stream
+		`EVENT SEQ(t0 e0, !(foo bar), !(baz boo), t2 e2)`:               true,  // Negated events not in stream
+		`EVENT SEQ(t0 e0, !(foo bar), !(t1 e1), !(baz boo), t2 e2)`:     false, // One negated event in stream
+		`EVENT SEQ(t0 e0, !(t1 e1_n), t1 e1)`:                           true,  // Only 1x e1 should be encountered
+		`EVENT SEQ(t0 e0, !(t1 e1_n), !(t1 e1_n1), t1 e1)`:              true,
+		`EVENT SEQ(t0 e0, !(t1 e1_n1), !(t0 e0_n), !(t1 e1_n2), t1 e1)`: true,
+		`EVENT ANY(t0 e0, foo foo)`:                                     true,
+		`EVENT ANY(foo foo, bar bar, baz baz)`:                          false,
+		`EVENT SEQ(t0 e0, ANY(foo foo, t1 e1))`:                         true,
 
 		// Attribute tests
-		`EVENT t0 e0 WHERE e0.string == "astring"`:                                     true,
-		`EVENT t0 e0 WHERE e0.nonexistent == 1`:                                        false,
-		`EVENT t0 e0 WHERE e0.stringdecimal == 1.0`:                                    false, // Wrong type
-		`EVENT t0 e0 WHERE e0.decimal == 100`:                                          true,
-		`EVENT t0 e0 WHERE e0.decimal == 100.0`:                                        true,
-		`EVENT t0 e0 WHERE e0.decimal == 100.00000000`:                                 true,
-		`EVENT t0 e0 WHERE e0.decimal == 0000100.00`:                                   true, // Different padding
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.decimal == e1.decimal`:                       true,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.array == e1.array`:                           true,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.string == e1.string`:                         true,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.stringdecimal == e1.stringdecimal`:           true,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.map == e1.map`:                               true, // Static attibutes
-		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.decimal == e1.decimal`:                     true,
-		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.array == e1.array`:                         true,
-		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.string == e1.string`:                       true,
-		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.stringdecimal == e1.stringdecimal`:         true,
-		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.map == e1.map`:                             true,
-		`EVENT t0 e0 WHERE [string]`:                                                   true,
-		`EVENT SEQ(t0 e0) WHERE [string]`:                                              true,  // Equivalence test
-		`EVENT SEQ(t0 e0, t1 e1, t2 e2) WHERE [string]`:                                true,  // Equivalence test
-		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1]`:                                           false, // e1 attr will be missing from e0
-		`EVENT SEQ(t0 e0, t1 e1, t1000 e1000) WHERE [string]`:                          false, // No t1000
-		`EVENT SEQ(t0 e0, t1 e1) WHERE [string] AND e0.decimal == e1.decimal`:          true,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1] AND e0.decimal == e1.decimal`:              false,
-		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1] OR e0.decimal == e1.decimal`:               true,
-		`EVENT SEQ(t0 e0, !(t1 e1_n), t1 e1) WHERE [string]`:                           true, // Only 1x e1 should be encountered
-		`EVENT SEQ(t0 e0, !(t1 e1_n), !(t1 e1_n1), t1 e1) WHERE [string]`:              true,
-		`EVENT SEQ(t0 e0, !(t1 e1_n1), !(t0 e0_n), !(t1 e1_n2), t1 e1) WHERE [string]`: true,
+		`EVENT t0 e0 WHERE e0.string == "astring"`:                             true,
+		`EVENT t0 e0 WHERE e0.nonexistent == 1`:                                false,
+		`EVENT t0 e0 WHERE e0.stringdecimal == 1.0`:                            false, // Wrong type
+		`EVENT t0 e0 WHERE e0.decimal == 100`:                                  true,
+		`EVENT t0 e0 WHERE e0.decimal == 100.0`:                                true,
+		`EVENT t0 e0 WHERE e0.decimal == 100.00000000`:                         true,
+		`EVENT t0 e0 WHERE e0.decimal == 0000100.00`:                           true, // Different padding
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.decimal == e1.decimal`:               true,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.array == e1.array`:                   true,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.string == e1.string`:                 true,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.stringdecimal == e1.stringdecimal`:   true,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.map == e1.map`:                       true, // Static attibutes
+		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.decimal == e1.decimal`:             true,
+		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.array == e1.array`:                 true,
+		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.string == e1.string`:               true,
+		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.stringdecimal == e1.stringdecimal`: true,
+		`EVENT SEQ(t10 e0, t99 e1) WHERE e0.map == e1.map`:                     true,
+		`EVENT t0 e0 WHERE [string]`:                                           true,
+		`EVENT SEQ(t0 e0) WHERE [string]`:                                      true,  // Equivalence test
+		`EVENT SEQ(t0 e0, t1 e1, t2 e2) WHERE [string]`:                        true,  // Equivalence test
+		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1]`:                                   false, // e1 attr will be missing from e0
+		`EVENT SEQ(t0 e0, t1 e1, t1000 e1000) WHERE [string]`:                  false, // No t1000
+		`EVENT SEQ(t0 e0, t1 e1) WHERE [string] AND e0.decimal == e1.decimal`:  true,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1] AND e0.decimal == e1.decimal`:      false,
+		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1] OR e0.decimal == e1.decimal`:       true,
 
 		// Window tests
 		`EVENT SEQ(t0 e0, t10 e10) WITHIN 1m`:    false, // e0 and e10 are 10 minutes apart
