@@ -68,13 +68,27 @@ func (c *basicEventCapture) evaluate(evs domain.CapturedEvents) Result {
 type seqEventCapture []EventCapture
 
 func (c seqEventCapture) Matches(e domain.Event) []string {
-	var result []string
+	var (
+		result         []string
+		negatedResult  []string
+		negations      = c.Negations()
+		negatedAliases = make(map[string]struct{}, len(negations))
+	)
+	for _, negatedAlias := range negations {
+		negatedAliases[negatedAlias] = struct{}{}
+	}
 	for _, subCap := range c {
-		if aliases := subCap.Matches(e); len(aliases) > 0 {
-			result = append(result, aliases...)
+		for _, alias := range subCap.Matches(e) {
+			if _, ok := negatedAliases[alias]; ok {
+				negatedResult = append(negatedResult, alias)
+			} else {
+				result = append(result, alias)
+			}
 		}
 	}
-	return result
+	// Negated aliases must be at the end (this is important, as negations must be evaluated later than positive
+	// matches, or we may inadvertently preempt a valid stack)
+	return append(result, negatedResult...)
 }
 
 func (c seqEventCapture) QueryText() string {
@@ -91,7 +105,7 @@ func (c seqEventCapture) QueryText() string {
 }
 
 func (c seqEventCapture) Negations() []string {
-	result := make([]string, 0)
+	var result []string
 	for _, subCap := range c {
 		result = append(result, subCap.Negations()...)
 	}
@@ -146,13 +160,27 @@ func (c seqEventCapture) evaluate(evs domain.CapturedEvents) Result {
 type anyEventCapture []EventCapture
 
 func (c anyEventCapture) Matches(e domain.Event) []string {
-	var result []string
+	var (
+		result         []string
+		negatedResult  []string
+		negations      = c.Negations()
+		negatedAliases = make(map[string]struct{}, len(negations))
+	)
+	for _, negatedAlias := range negations {
+		negatedAliases[negatedAlias] = struct{}{}
+	}
 	for _, subCap := range c {
-		if aliases := subCap.Matches(e); len(aliases) > 0 {
-			result = append(result, aliases...)
+		for _, alias := range subCap.Matches(e) {
+			if _, ok := negatedAliases[alias]; ok {
+				negatedResult = append(negatedResult, alias)
+			} else {
+				result = append(result, alias)
+			}
 		}
 	}
-	return result
+	// Negated aliases must be at the end (this is important, as negations must be evaluated later than positive
+	// matches, or we may inadvertently preempt a valid stack)
+	return append(result, negatedResult...)
 }
 
 func (c anyEventCapture) QueryText() string {
@@ -169,7 +197,7 @@ func (c anyEventCapture) QueryText() string {
 }
 
 func (c anyEventCapture) Negations() []string {
-	result := make([]string, 0)
+	var result []string
 	for _, subCap := range c {
 		result = append(result, subCap.Negations()...)
 	}
