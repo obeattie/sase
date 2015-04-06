@@ -105,7 +105,7 @@ func genStacks(evs []domain.Event, q *Query) []domain.CapturedEvents {
 
 func TestE2E(t *testing.T) {
 	events := genEvents(100)
-	queries := map[string]bool{ // true = one positive match
+	queries := map[string]bool{ // true = one (and only one) positive match
 		`EVENT t0 e0`:                                                   true,  // No predicate should match
 		`EVENT t0 e0 WHERE e0.foobar == e0.foobaz`:                      false, // Nonexistent events
 		`EVENT SEQ(t0 e0, t1 e1) WHERE e0.e0 == e1.e0`:                  true,
@@ -156,6 +156,8 @@ func TestE2E(t *testing.T) {
 		`EVENT SEQ(t0 e0, t10 e10) WITHIN 10m`:   true,
 		`EVENT SEQ(t0 e0, t10 e10) WITHIN 1h`:    true,
 		`EVENT SEQ(t0 e0, t10 e10) WITHIN 9m59s`: false,
+
+		`EVENT SEQ(t0 e0, !(foo bar), t1 e1) WHERE e0.string == e1.string AND e0.string == bar.string`: true,
 	}
 
 	for queryText, expectedResult := range queries {

@@ -92,7 +92,7 @@ type operatorPredicate struct {
 func (p *operatorPredicate) Evaluate(evs domain.CapturedEvents) Result {
 	leftVal, rightVal, err := leftRightVals(evs, p.left, p.right)
 	if err == ErrEventNotFound {
-		return Uncertain
+		return Positive
 	} else if err != nil {
 		log.Errorf("[sase:operatorPredicate] Could not evaluate %s left/right: %s", p.QueryText(), err.Error())
 		return Negative // Terminate this match
@@ -214,7 +214,7 @@ func (p equivalenceTestPredicate) Evaluate(evs domain.CapturedEvents) Result {
 	for alias, _ := range evs {
 		if val, err := attributeLookup(fmt.Sprintf("%s.%s", alias, p)).Value(evs); err != nil {
 			if err == ErrEventNotFound {
-				return Uncertain
+				return Positive
 			} else if err != nil {
 				log.Errorf("[sase:equivalenceTestPredicate] Could not evaluate %s left/right: %s", p.QueryText(), err.Error())
 				return Negative // Terminate this match

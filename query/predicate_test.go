@@ -104,8 +104,8 @@ func TestOperatorPredicate(t *testing.T) {
 			[2]string{"e1.foo", "e3.foo"}:       Negative,
 			[2]string{"e2.bar", "e3.bar"}:       Positive,
 			[2]string{"e1.bar", "e3.bar"}:       Negative,
-			[2]string{"e1.foo", "e3.bazbazbas"}: Negative,  // Attribute not found
-			[2]string{"e1.foo", "e5.foo"}:       Uncertain, // Event not found
+			[2]string{"e1.foo", "e3.bazbazbas"}: Negative, // Attribute not found
+			[2]string{"e1.foo", "e5.foo"}:       Positive, // Event not found
 		},
 		opNe: { // The inverse of opEq's cases
 			[2]string{"e1.foo", "e2.foo"}:       Negative,
@@ -113,7 +113,7 @@ func TestOperatorPredicate(t *testing.T) {
 			[2]string{"e2.bar", "e3.bar"}:       Negative,
 			[2]string{"e1.bar", "e3.bar"}:       Positive,
 			[2]string{"e1.foo", "e3.bazbazbas"}: Negative, // Attribute not found always return false
-			[2]string{"e1.foo", "e5.foo"}:       Uncertain,
+			[2]string{"e1.foo", "e5.foo"}:       Positive,
 		},
 		opLt: {
 			[2]string{"e1.num", "e3.num"}:       Positive,
