@@ -14,9 +14,10 @@ import (
 /* GenEvents returns a slice of events of the given length. These events:
 
    * have aliases "e{{n}}", where n is its index in the slice (0-indexed)
-   * have a type "t{{n}}", where n is the same value as above
+   * have a type "t{{n}}", where n is as given above
    * have all the attributes of the previous event, with an additional attribute (randomly chosen from a map of
      candidates).
+   * have a unique attribute "ue{{n}}" (=1), where n is as given above
    * have static attributes "map", "array", "decimal", "string", and "stringdecimal"
    * are sepearated by 1 minute intervals
 */
@@ -58,9 +59,14 @@ func genEvents(length int) []domain.Event {
 		key := fmt.Sprintf("e%d", i)
 		lastTs = lastTs.Add(1 * time.Minute)
 		lastAttrs = newAttrs(key)
+		attrs := map[string]interface{}{}
+		for k, v := range lastAttrs {
+			attrs[k] = v
+		}
+		attrs["u"+key] = 1
 		result[i] = &tEventImpl{
 			typ:   fmt.Sprintf("t%d", i),
-			attrs: lastAttrs,
+			attrs: attrs,
 			ts:    lastTs,
 		}
 	}
@@ -150,14 +156,17 @@ func TestE2E(t *testing.T) {
 		`EVENT SEQ(t0 e0, t1 e1) WHERE [string] AND e0.decimal == e1.decimal`:  true,
 		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1] AND e0.decimal == e1.decimal`:      false,
 		`EVENT SEQ(t0 e0, t1 e1) WHERE [e1] OR e0.decimal == e1.decimal`:       true,
+		// …on optional events
+		`EVENT SEQ(t0 e0, ANY(t1 e1, foo bar)) WHERE [string]`:              true,  // foo not present
+		`EVENT SEQ(t0 e0, ANY(t1 e1)) WHERE [ue0]`:                          false, // ue0 not present on e1
+		`EVENT SEQ(t0 e0, !(foo bar), t1 e1) WHERE [string]`:                true,  // foo not present
+		`EVENT SEQ(t0 e0, !(foo bar), t1 e1) WHERE e0.string == bar.string`: true,
 
 		// Window tests
 		`EVENT SEQ(t0 e0, t10 e10) WITHIN 1m`:    false, // e0 and e10 are 10 minutes apart
 		`EVENT SEQ(t0 e0, t10 e10) WITHIN 10m`:   true,
 		`EVENT SEQ(t0 e0, t10 e10) WITHIN 1h`:    true,
 		`EVENT SEQ(t0 e0, t10 e10) WITHIN 9m59s`: false,
-
-		`EVENT SEQ(t0 e0, !(foo bar), t1 e1) WHERE e0.string == e1.string AND e0.string == bar.string`: true,
 	}
 
 	for queryText, expectedResult := range queries {
@@ -166,7 +175,6 @@ func TestE2E(t *testing.T) {
 		require.NoError(t, err, fmt.Sprintf("Unexpected error parsing query \"%s\"", queryText))
 
 		stacks := genStacks(events, q)
-		t.Logf("Generated %d stacks for \"%s\"", len(stacks), queryText)
 		found := false
 		for _, stack := range stacks {
 			r := q.Evaluate(stack)
