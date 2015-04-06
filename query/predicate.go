@@ -121,7 +121,7 @@ func (p *operatorPredicate) Evaluate(evs domain.CapturedEvents) Result {
 				return Negative
 			}
 		}
-		log.Errorf("[sase:operatorPredicate] Could not compare gt for non-float64s: %s", p.QueryText())
+		log.Errorf("[sase:operatorPredicate] Could not compare gt for non-float64: %s", p.QueryText())
 		return Negative // Terminate this match
 
 	case opLt:
@@ -133,7 +133,7 @@ func (p *operatorPredicate) Evaluate(evs domain.CapturedEvents) Result {
 				return Negative
 			}
 		}
-		log.Errorf("[sase:operatorPredicate] Could not compare lt for non-float64s: %s", p.QueryText())
+		log.Errorf("[sase:operatorPredicate] Could not compare lt for non-float64: %s", p.QueryText())
 		return Negative // Terminate this match
 
 	case opGe:
@@ -145,7 +145,7 @@ func (p *operatorPredicate) Evaluate(evs domain.CapturedEvents) Result {
 				return Negative
 			}
 		}
-		log.Errorf("[sase:operatorPredicate] Could not compare ge for non-float64s: %s", p.QueryText())
+		log.Errorf("[sase:operatorPredicate] Could not compare ge for non-float64: %s", p.QueryText())
 		return Negative // Terminate this match
 
 	case opLe:
@@ -157,7 +157,7 @@ func (p *operatorPredicate) Evaluate(evs domain.CapturedEvents) Result {
 				return Negative
 			}
 		}
-		log.Errorf("[sase:operatorPredicate] Could not compare le for non-float64s: %s", p.QueryText())
+		log.Errorf("[sase:operatorPredicate] Could not compare le for non-float64: %s", p.QueryText())
 		return Negative // Terminate this match
 
 	default:
