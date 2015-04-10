@@ -206,6 +206,31 @@ func TestE2EDuplicateTypes(t *testing.T) {
 			}}}
 
 	queryText := `EVENT SEQ(t0 e0, t0 e1) WHERE [attr]`
+
+	testEventSequence(t, queryText, events, true)
+}
+
+func TestE2ENegatedSequence(t *testing.T) {
+	events := []domain.Event{
+		&tEventImpl{
+			typ: "t0",
+			ts:  time.Date(2014, 1, 1, 0, 0, 20, 0, time.UTC),
+		},
+		&tEventImpl{
+			typ: "t0",
+			ts:  time.Date(2014, 1, 1, 0, 0, 20, 1, time.UTC),
+			attrs: map[string]interface{}{
+				"attr": "val",
+			},
+		},
+	}
+
+	queryText := `EVENT SEQ(t0 e0, !(t0 e1), t0 e2) WHERE e1.attr == "val"`
+
+	testEventSequence(t, queryText, events, false)
+}
+
+func testEventSequence(t *testing.T, queryText string, events []domain.Event, expectMatch bool) {
 	q, err := Parse(queryText)
 	require.NoError(t, err, fmt.Sprintf("Unexpected error parsing query \"%s\"", queryText))
 
@@ -220,5 +245,5 @@ func TestE2EDuplicateTypes(t *testing.T) {
 		}
 	}
 
-	require.True(t, found, fmt.Sprintf("No positive match found for \"%s\"", queryText))
+	require.Equal(t, expectMatch, found, fmt.Sprintf("Unexpected match for \"%s\"", queryText))
 }
